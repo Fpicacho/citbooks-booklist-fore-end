@@ -1,25 +1,62 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: "/",
+    redirect: "/home",
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: "/home",
+    name: "home",
+    component: () => import("../views/Home/IndexView.vue"),
+    children: [
+      {
+        //
+        path: "/home",
+        component: () => import("../views/Home/HomeView.vue"),
+      },
+      {
+        path: "/home/bookList",
+        name: "home-bookList",
+        component: () => import("../views/Home/BookListView.vue"),
+      },
+      {
+        path:"/home/details",
+        name:"home-details",
+        component:() => import("../views/Home/Details.vue")
+      }
+    ],
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("../views/Login/LoginView.vue"),
+  },
+  {
+    path:"/test",
+    name:"test",
+    component:()=>import("../views/test.vue")
+  },
+  {
+    path:"/tableTest",
+    name:"testTable",
+    component:()=>import("../views/tableTest.vue")
+  },
+  {
+    // 404
+    path: "/404",
+    name: "404",
+    component: () => import("../views/404"),
+  },
+  {
+    path: "/:pathMatch(.*)",
+    redirect: "/404",
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
