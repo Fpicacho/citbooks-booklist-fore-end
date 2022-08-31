@@ -8,8 +8,8 @@
     </div>
     <div class="r">
       <span class="item">版权所有 © 中国科技资料进出口总公司</span>
-      <span class="item">京ICP备15006448号</span>
-      <span class="item">京公网安备 110402430053号</span>
+      <span class="item">京ICP备11126448号</span>
+      <span class="item">京公网安备 130040051243号</span>
     </div>
   </div>
 </template>
