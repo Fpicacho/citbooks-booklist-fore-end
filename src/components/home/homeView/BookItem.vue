@@ -33,7 +33,6 @@
             data.supplyInfo
           }}</span>
         </span>
-
         <slot></slot>
       </div>
     </div>

@@ -41,18 +41,12 @@ export const useBookListStore = defineStore("bookListStore", {
         message.success(`已将《${targget.title}》加入至我的书单。`);
       }
     },
+    // 移除书单逻辑
     DeleteBookListItem(index,targget) {
       this.BOOK_LIST.splice(index, 1);
       message.success(`已将《${targget.title}》移除我的书单。`);
     },
   },
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        storage: localStorage,
-        paths: ["BOOK_LIST"],
-      },
-    ],
-  },
+  // 开启本地化存储选项
+  persist: true,
 });

@@ -2,20 +2,19 @@
   <!-- 我的书单 src\views\Home\BookListView.vue-->
   <div class="bookListView">
     <div class="container">
+      <!-- 提示信息 -->
       <a-alert
         message="尊敬的用户您好，在使用移动设备时建议将屏幕横置，以获得更好的阅览体验！"
         type="warning"
         closable
         style="margin-bottom: 20px"
       />
+      <!-- 表单 -->
       <div class="tableBox">
         <a-table
           :columns="columns"
           :dataSource="BOOK_LIST"
           :scroll="{ x: 1024 }"
-          :row-class-name="
-            (_record, index) => (index % 2 === 1 ? 'table-striped' : null)
-          "
           bordered
         >
           <template #bodyCell="{ column, record, index }">
@@ -26,19 +25,25 @@
                 :width="70"
               />
             </template>
+            <!-- 操作面板#表单插槽 -->
             <template v-if="column.dataIndex === 'operate'">
               <a-button
                 type="link"
                 @click="utility.goTo('home-details', { isbn: record.isbn })"
                 >详情</a-button
               >
-              <a-button type="link" @click="DeleteBookListItem(index,record)" danger
+              <a-button
+                type="link"
+                @click="DeleteBookListItem(index, record)"
+                danger
                 >删除</a-button
               >
             </template>
           </template>
           <template #footer>
-            <a-button type="primary">导出书单至本地（Excel表格）</a-button>
+            <a-button type="primary" @click="outputExcel"
+              >导出书单至本地（Excel表格）</a-button
+            >
             <a-button type="primary">提交数据</a-button>
           </template>
         </a-table>
@@ -49,6 +54,8 @@
 
 <script setup>
 import utility from "../../utility/index";
+import { message } from "ant-design-vue";
+import * as XLSX from "xlsx";
 import { storeToRefs } from "pinia";
 import { useBookListStore } from "../../store/bookListStore";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
@@ -123,6 +130,56 @@ const columns = [
     fixed: "right",
   },
 ];
+
+// 导出Excel逻辑
+function outputExcel() {
+  if (BOOK_LIST.value.length > 0) {
+    const ExcelItem = [];
+    BOOK_LIST.value.forEach((item) => {
+      let { imgUrl, ...params } = item;
+      ExcelItem.push(params);
+    });
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(ExcelItem);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "图书采购清单");
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [
+        [
+          "书名",
+          "作者",
+          "出版社",
+          "类别",
+          "ISBN",
+          "中图分类号",
+          "装帧",
+          "页数",
+          "币制",
+          "价格",
+          "供货状态",
+        ],
+      ],
+      { origin: "A1" }
+    );
+    worksheet["!cols"] = [
+      { wch: 40 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 20 },
+    ];
+    XLSX.writeFile(workbook, "图书采购清单.xlsx");
+    message.success("导出Excel表格完成！")
+    return;
+  }
+  message.error("书单为空，无法导出Excel");
+}
 </script>
 
 <style lang="scss" scoped>
@@ -135,7 +192,6 @@ const columns = [
     margin: 0 auto;
   }
 }
-
 @media screen and (max-width: 1080px) {
   // 正常电脑分辨率
 }
