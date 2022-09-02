@@ -65,7 +65,7 @@ const visible = ref(false);
 function handleMenuClick(flag) {
   switch (flag.key) {
     case "1":
-      console.log("我的书单");
+    utility.goTo('home-bookList')
       break;
     case "2":
       visible.value = true;
