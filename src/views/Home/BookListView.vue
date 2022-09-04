@@ -10,15 +10,14 @@
         style="margin-bottom: 20px"
       />
       <!-- 面包导航 -->
-      <a-breadcrumb :routes="routes" style="margin:20px 0">
+      <a-breadcrumb :routes="routes" style="margin: 20px 0">
         <template #itemRender="{ route, params, routes, paths }">
           <span v-if="routes.indexOf(route) === routes.length - 1">{{
             route.breadcrumbName
           }}</span>
           <router-link v-else :to="{ name: route.name }">
-          {{
-            route.breadcrumbName
-          }}</router-link>
+            {{ route.breadcrumbName }}</router-link
+          >
         </template>
       </a-breadcrumb>
       <!-- 图书列表 -->

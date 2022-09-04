@@ -1,6 +1,6 @@
 <template>
   <!-- 全局响应遮罩 -->
-  <a-spin tip="Loading..." size="large" :spinning="LOADING_STATE">
+  <a-spin tip="加载中..." size="large" :spinning="LOADING_STATE">
     <!-- 默认路由出口 -->
     <router-view />
   </a-spin>

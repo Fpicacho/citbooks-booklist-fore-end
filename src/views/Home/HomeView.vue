@@ -21,6 +21,7 @@
       <!-- 图书列表容器 -->
       <div class="bookList">
         <BookItem
+          v-if="state.bookListData.length > 0"
           v-for="item in state.bookListData"
           :key="item.isbn"
           :data="item"
@@ -33,6 +34,7 @@
             >
           </div>
         </BookItem>
+        <a-empty v-else description="找不到相关内容，换一种检索方式或者向我们提交建议。" style="padding: 25px;"/>
       </div>
       <!-- 分页器 -->
       <a-pagination
@@ -120,14 +122,14 @@ const state = reactive({
       title: "斗罗大陆",
       author: "唐家三少",
       press: "湖南少年儿童出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7556242331",
       clcNo: "A10",
       binding: "锁线胶订",
       pages: 931,
       monetary: "人民币",
       price: 80,
-      supplyInfo:"库存现货，数量1"
+      supplyInfo: "库存现货，数量1",
     },
     {
       imgUrl:
@@ -135,14 +137,14 @@ const state = reactive({
       title: "科学的超电磁炮 SS 1",
       author: "镰池和馬",
       press: "epub掌上書苑",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "1174981576",
       clcNo: "B122",
       binding: "锁线胶订",
       pages: 150,
       monetary: "人民币",
       price: 30,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -150,14 +152,14 @@ const state = reactive({
       title: "青春猪头少年不会梦到兔女郎学姐",
       author: "鸭志田一",
       press: "中信出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "B072C29BL1",
       clcNo: "B22",
       binding: "方背平脊精装",
       pages: 999,
       monetary: "美元",
       price: 100,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -165,14 +167,14 @@ const state = reactive({
       title: "日本动漫绘画中的线条设计",
       author: "上村雅春",
       press: "电子工业出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7121310074",
       clcNo: "Z12",
       binding: "锁线胶订",
       pages: 200,
       monetary: "日元",
       price: 5000,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -181,14 +183,14 @@ const state = reactive({
         "你不知道的JavaScript（上卷）= You Don’t Know JS Scope & closures this & object prototypes",
       author: "Kyle Simpson",
       press: "人民邮电出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7115385734",
       clcNo: "C32",
       binding: "锁线胶订",
       pages: 213,
       monetary: "人民币",
       price: 30,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -196,14 +198,14 @@ const state = reactive({
       title: "算法导论（原书第3版）",
       author: "Thomas H.Cormen",
       press: "机械工业出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7111407016",
       clcNo: "P02",
       binding: "锁线胶订",
       pages: 415,
       monetary: "人民币",
       price: 99,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -212,14 +214,14 @@ const state = reactive({
         "英雄联盟：符文之地的故事（英雄联盟十周年纪念；拳头游戏官方出品；官方宇宙设定集；十年青春，此生无悔入联盟！）",
       author: "美国拳头游戏",
       press: "中信出版集团",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7521717031",
       clcNo: "Q84",
       binding: "锁线胶订",
       pages: 555,
       monetary: "人民币",
       price: 199,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -227,14 +229,14 @@ const state = reactive({
       title: "素描的诀窍",
       author: "[美] 伯特·多德森",
       press: "上海人民美术出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7532228703",
       clcNo: "F43",
       binding: "锁线胶订",
       pages: 200,
       monetary: "人民币",
       price: 70,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -242,14 +244,14 @@ const state = reactive({
       title: "伯里曼人体结构绘画教学",
       author: "乔治·伯里曼",
       press: "广西美术出版社",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7806740651",
       clcNo: "P44",
       binding: "锁线胶订",
       pages: 200,
       monetary: "人民币",
       price: 55,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
     {
       imgUrl:
@@ -257,14 +259,14 @@ const state = reactive({
       title: "Linux内核设计的艺术: 图解Linux操作系统架构设计与实现原理",
       author: "新设计团队",
       press: "机械工业出版社华章公司",
-      category:"计算机-编程",
+      category: "计算机-编程",
       isbn: "7111347447",
       clcNo: "I43",
       binding: "锁线胶订",
       pages: 800,
       monetary: "人民币",
       price: 180,
-      supplyInfo:"现货，三个月内到货"
+      supplyInfo: "现货，三个月内到货",
     },
   ],
   // 分页器数据
