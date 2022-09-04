@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
   {
@@ -36,25 +36,20 @@ const routes = [
     name:"test",
     component:()=>import("../views/test.vue")
   },
-  {
-    path:"/tableTest",
-    name:"testTable",
-    component:()=>import("../views/tableTest.vue")
-  },
-  {
-    // 404
-    path: "/404",
-    name: "404",
-    component: () => import("../views/404"),
-  },
-  {
-    path: "/:pathMatch(.*)",
-    redirect: "/404",
-  },
+  // {
+  //   // 404
+  //   path: "/404",
+  //   name: "404",
+  //   component: () => import("../views/404"),
+  // },
+  // {
+  //   path: "/:pathMatch(.*)",
+  //   redirect: "/404",
+  // },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes,
 });
 

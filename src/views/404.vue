@@ -3,18 +3,14 @@
   <div id="404">
     <a-result status="404" title="404" sub-title="生活总归带点荒谬，你说是吧。">
     <template #extra>
-      <a-button type="primary">返回首页</a-button>
+      <a-button type="primary" @click="utility.goTo('home')">返回首页</a-button>
     </template>
   </a-result>
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {};
-  },
-};
+<script setup>
+import utility from '../utility/index';
 </script>
 
 <style lang="scss" scoped></style>

@@ -2,17 +2,15 @@
   <div class="header">
     <div class="l">
       <a-tag
-        color="#2db7f5"
-        style="cursor: pointer"
-        @click="utility.goTo('http://www.ctibooks.com.cn/#/')"
-        >中国科技资料进出口</a-tag
+        color="#f50"
+        >海洋大学</a-tag
       >
-      <a-tag color="#87d068">共123745本书</a-tag>
+      <a-tag color="#2db7f5">共123745本书</a-tag>
       <a-tag
-        color="#108ee9"
+        color="#87d068"
         style="cursor: pointer"
         @click="utility.goTo('home')"
-        >书展主页</a-tag
+        >书展首页</a-tag
       >
     </div>
     <div class="r">

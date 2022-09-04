@@ -9,7 +9,19 @@
         closable
         style="margin-bottom: 20px"
       />
-      <!-- 表单 -->
+      <!-- 面包导航 -->
+      <a-breadcrumb :routes="routes" style="margin:20px 0">
+        <template #itemRender="{ route, params, routes, paths }">
+          <span v-if="routes.indexOf(route) === routes.length - 1">{{
+            route.breadcrumbName
+          }}</span>
+          <router-link v-else :to="{ name: route.name }">
+          {{
+            route.breadcrumbName
+          }}</router-link>
+        </template>
+      </a-breadcrumb>
+      <!-- 图书列表 -->
       <div class="tableBox">
         <a-table
           :columns="columns"
@@ -44,22 +56,159 @@
             <a-button type="primary" @click="outputExcel"
               >导出书单至本地（Excel表格）</a-button
             >
-            <a-button type="primary">提交数据</a-button>
+            <a-button type="primary" @click="visible = !visible"
+              >上传我的选书清单 ({{ BOOK_LIST.length }})本</a-button
+            >
           </template>
         </a-table>
       </div>
+      <!-- 提交书单抽屉 -->
+      <a-drawer
+        v-model:visible="visible"
+        class="custom-class"
+        title="上传书单"
+        placement="left"
+        width="320"
+      >
+        <!-- 提交书单表单 -->
+        <a-form
+          :model="state.formState"
+          name="basic"
+          autocomplete="off"
+          @finish="onFinish"
+        >
+          <a-form-item
+            label="姓名"
+            name="teachName"
+            :rules="[{ required: true, message: '请输入姓名' }]"
+          >
+            <a-input
+              v-model:value="state.formState.teachName"
+              :maxlength="10"
+              placeholder="请输入姓名"
+            />
+          </a-form-item>
+          <a-form-item
+            label="电话"
+            name="telNub"
+            :rules="[
+              { required: true, message: '请输入电话号码', trigger: 'blur' },
+              {
+                pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+                message: '请输入正确的手机号码',
+                trigger: 'blur',
+              },
+            ]"
+          >
+            <a-input
+              v-model:value="state.formState.telNub"
+              :maxlength="11"
+              placeholder="请输入移动电话号码"
+            />
+          </a-form-item>
+          <a-form-item
+            label="邮箱"
+            name="email"
+            :rules="[
+              { required: true, message: '请输入邮箱' },
+              {
+                pattern: /^\w{1,64}@[a-z0-9\-]{1,256}(\.[a-z]{2,6}){1,2}$/,
+                message: '邮箱格式有误，请检查！',
+                trigger: 'blur',
+              },
+            ]"
+          >
+            <a-input
+              v-model:value="state.formState.email"
+              :maxlength="50"
+              placeholder="请输入邮箱"
+            />
+          </a-form-item>
+          <a-form-item
+            label="院系"
+            name="depart"
+            :rules="[{ required: true, message: '请输入院系' }]"
+          >
+            <a-input
+              v-model:value="state.formState.depart"
+              :maxlength="50"
+              placeholder="请输入院系"
+            />
+          </a-form-item>
+          <a-form-item
+            label="类型"
+            name="type"
+            :rules="[{ required: true, message: '请选择类型' }]"
+          >
+            <a-select v-model:value="state.formState.type" :options="types" />
+          </a-form-item>
+          <a-form-item
+            label="学号"
+            name="mark"
+            :rules="[{ required: true, message: '请输入学号' }]"
+          >
+            <a-input
+              v-model:value="state.formState.mark"
+              :maxlength="50"
+              placeholder="请输入学号"
+            />
+          </a-form-item>
+          <a-form-item
+            label="推荐理由"
+            name="recommendedText"
+            :rules="[
+              {
+                required: true,
+                message: '请输入推荐理由',
+              },
+            ]"
+          >
+            <a-textarea
+              v-model:value="state.formState.recommendedText"
+              :maxlength="5000"
+              show-count
+              allow-clear
+              placeholder="需有限采购或者自荐书单的书请写在推荐理由中，多个ISBN号之间可以使用;分割。"
+            />
+          </a-form-item>
+          <a-form-item>
+            <a-button
+              type="primary"
+              html-type="submit"
+              :loading="LOADING_STATE"
+              style="width: 100%"
+              >提交书单</a-button
+            >
+          </a-form-item>
+        </a-form>
+      </a-drawer>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, reactive } from "vue";
+import { RouterLink } from "vue-router";
 import utility from "../../utility/index";
 import { message } from "ant-design-vue";
 import * as XLSX from "xlsx";
 import { storeToRefs } from "pinia";
 import { useBookListStore } from "../../store/bookListStore";
+import { useLoadingStateStore } from "../../store/loadingStateStore";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
 const { DeleteBookListItem } = useBookListStore();
+const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
+const { SetloadingState } = useLoadingStateStore();
+const routes = [
+  {
+    name: "home",
+    breadcrumbName: "书展首页",
+  },
+  {
+    name: "home-bookList",
+    breadcrumbName: "我的书单",
+  },
+];
 const columns = [
   {
     title: "封面",
@@ -130,6 +279,24 @@ const columns = [
     fixed: "right",
   },
 ];
+const visible = ref(false);
+const types = [
+  { label: "专科生", value: "zhuanke" },
+  { label: "本科生", value: "benke" },
+  { label: "硕士研究生", value: "shuoshi" },
+  { label: "博士研究生", value: "boshi" },
+];
+const state = reactive({
+  formState: {
+    teachName: "",
+    telNub: "",
+    email: "",
+    depart: "",
+    type: "",
+    mark: "",
+    recommendedText: "",
+  },
+});
 
 // 导出Excel逻辑
 function outputExcel() {
@@ -175,10 +342,19 @@ function outputExcel() {
       { wch: 20 },
     ];
     XLSX.writeFile(workbook, "图书采购清单.xlsx");
-    message.success("导出Excel表格完成！")
+    message.success("导出Excel表格完成！");
     return;
   }
   message.error("书单为空，无法导出Excel");
+}
+// 提交表单逻辑
+function onFinish(values) {
+  SetloadingState(true);
+  const isbns = [];
+  BOOK_LIST.value.forEach((item) => {
+    isbns.push(item.isbn);
+  });
+  values.isbns = isbns;
 }
 </script>
 

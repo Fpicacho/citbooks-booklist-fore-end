@@ -3,6 +3,7 @@ import { message } from "ant-design-vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { createVNode } from "vue";
 import { Modal } from "ant-design-vue";
+// 全局书单容器
 export const useBookListStore = defineStore("bookListStore", {
   state: () => {
     return {
