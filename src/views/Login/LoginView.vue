@@ -9,11 +9,25 @@
         alt="logo图像资源加载失败"
       />
       <p class="decorativeTtext">Single Sign In</p>
-      <a-form>
-        <a-input class="idIpt" placeholder="组织账户" maxlength="24" />
-        <a-input-password class="pwdIpt" placeholder="密码" maxlength="24" />
+      <a-form :model="formState" @finish="onFinish">
+        <a-form-item
+          label=""
+          name="account"
+          :rules="[{ required: true, message: '请输入账户!' }]"
+        >
+          <a-input placeholder="组织账户" v-model:value="formState.account"/>
+        </a-form-item>
+        <a-form-item
+          label=""
+          name="password"
+          :rules="[{ required: true, message: '请输入密码!' }]"
+        >
+          <a-input-password placeholder="请输入密码" v-model:value="formState.password"/>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit" style="width:100%">登录</a-button>
+        </a-form-item>
       </a-form>
-      <a-button class="loginBtn" type="primary">登录</a-button>
       <div class="registerBox">
         <span>没有账户？</span>
         <a-button @click="showModal">注册</a-button>
@@ -32,9 +46,19 @@
 <script setup>
 import { ref } from "vue";
 const visible = ref(false);
+const formState = ref({
+  account: "",
+  password: "",
+});
 
 function showModal() {
   visible.value = !visible.value;
+}
+
+
+// 提交表单逻辑
+function onFinish(value){
+  console.log(value)
 }
 </script>
 
@@ -63,12 +87,6 @@ function showModal() {
       line-height: 22px;
       color: #434343;
       border-bottom: none;
-    }
-    .idIpt {
-      margin-bottom: 15px;
-    }
-    .pwdIpt {
-      margin-bottom: 25px;
     }
     .loginBtn {
       width: 100%;

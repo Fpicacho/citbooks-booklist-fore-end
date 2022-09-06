@@ -9,33 +9,77 @@
       </div>
       <!-- 搜索框 -->
       <div class="searchBox">
-        <a-input-search
-          v-model:value="searchValue"
-          placeholder="按书名、作者、出版社、ISBN 搜索"
-          enter-button="搜索"
-          size="large"
-          @search="onSearch"
-        />
-        <span class="categorySearch" @click="onShowDrawer">按分类搜索</span>
-      </div>
-      <!-- 图书列表容器 -->
-      <div class="bookList">
-        <BookItem
-          v-if="state.bookListData.length > 0"
-          v-for="item in state.bookListData"
-          :key="item.isbn"
-          :data="item"
-          @click.stop="openDetailsView(item.isbn)"
+        <a-input-group compact id="SearchBoxForm">
+          <a-select v-model:value="state.searchBoxData.type">
+            <a-select-option value="title">书名</a-select-option>
+            <a-select-option value="author">作者名</a-select-option>
+            <a-select-option value="press">出版社</a-select-option>
+            <a-select-option value="isbn">ISBN</a-select-option>
+          </a-select>
+          <a-input v-model:value="state.searchBoxData.value" placeholder="请输入检索内容"/>
+          <a-button type="primary" @click=onSearch>搜索</a-button>
+        </a-input-group>
+        <span
+          id="peCategorySearch"
+          class="categorySearch"
+          @click="visible = !visible"
+          >按分类搜索</span
         >
-          <div style="margin-top: 10px">
-            <!-- 插槽行为 src\views\Home\HomeView.vue-->
-            <a-button type="primary" @click.stop="SetBookListItem(item)"
-              >加入书单</a-button
-            >
-          </div>
-        </BookItem>
-        <a-empty v-else description="找不到相关内容，换一种检索方式或者向我们提交建议。" style="padding: 25px;"/>
+        <span id="pcCategorySearch" class="categorySearch">共计15272本书</span>
       </div>
+      <main>
+        <!-- pc端二级书容器 -->
+        <div class="pcTreeBox">
+          <a-image-preview-group>
+            <a-carousel autoplay>
+              <a-image
+                v-for="(item, index) in state.bannerList"
+                :key="index"
+                :src="item"
+                style="width: 23%"
+              />
+            </a-carousel>
+          </a-image-preview-group>
+          <div
+            style="
+              padding: 16px;
+              box-shadow: 0px 1px 3px #ddd;
+              background: #fff;
+            "
+          >
+            <p>按分类搜索：</p>
+            <a-tree
+              v-if="state.treeData.length"
+              :tree-data="state.treeData"
+              :block-node="true"
+              @check="clickTreeNode"
+              :checkable="true"
+            />
+          </div>
+        </div>
+        <!-- 图书列表容器 -->
+        <div class="bookList">
+          <BookItem
+            v-if="state.bookListData.length > 0"
+            v-for="item in state.bookListData"
+            :key="item.isbn"
+            :data="item"
+            @click.stop="openDetailsView(item.isbn)"
+          >
+            <div style="margin-top: 10px">
+              <!-- 插槽行为 src\views\Home\HomeView.vue-->
+              <a-button type="primary" @click.stop="SetBookListItem(item)"
+                >加入书单</a-button
+              >
+            </div>
+          </BookItem>
+          <a-empty
+            v-else
+            description="找不到相关内容，换一种检索方式或者向我们提交建议。"
+            style="padding: 25px"
+          />
+        </div>
+      </main>
       <!-- 分页器 -->
       <a-pagination
         :total="state.pager.total"
@@ -49,15 +93,15 @@
         title="分类搜索"
         placement="left"
         :visible="visible"
-        @close="onShowDrawer"
+        @close="visible = !visible"
       >
         <!-- 二级树 -->
         <a-tree
           v-if="state.treeData.length"
           :tree-data="state.treeData"
           :block-node="true"
-          :defaultExpandAll="true"
-          @select="clickTreeNode"
+          @check="clickTreeNode"
+          :checkable="true"
         />
       </a-drawer>
     </div>
@@ -65,20 +109,28 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import BookItem from "../../components/home/homeView/BookItem.vue";
 import { message } from "ant-design-vue";
+
 import utility from "../../utility/index";
+import reqInterface from "../../api/reqInterface";
+
 import { useBookListStore } from "../../store/bookListStore";
 const { SetBookListItem } = useBookListStore();
 
-const searchValue = ref("");
 const visible = ref(false);
 const state = reactive({
+  // 轮播数据
+  bannerList: [
+    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGNjZjlmNGU2MDIxMGMwYzBhM2NkMDMQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
+    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGQ2ZWZlOGU1MDIxMGY0OTNkNWIxMDYQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
+    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGMzYTI5MWU2MDIxMGViYTY5YWYyMDEQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
+  ],
   // 二级树数据
   treeData: [
     {
-      title: "计算机",
+      title: "文化、科学、教育、体育",
       key: "computer",
       children: [
         {
@@ -118,7 +170,7 @@ const state = reactive({
   bookListData: [
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers100/books/22/23/1b/22231bcea1f27535d345696b14890988.jpg",
+        "https://th.bing.com/th/id/OIP.JVLKy4czE7GaNNunNMofXAHaIp?w=176&h=206&c=7&r=0&o=5&pid=1.7",
       title: "斗罗大陆",
       author: "唐家三少",
       press: "湖南少年儿童出版社",
@@ -133,7 +185,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/41/65/cb/4165cb82efa3cd92976330d3396232c0.jpg",
+        "https://th.bing.com/th/id/OIP.udJmEu3EFv13pStbKkkD0gAAAA?w=204&h=290&c=7&r=0&o=5&pid=1.7",
       title: "科学的超电磁炮 SS 1",
       author: "镰池和馬",
       press: "epub掌上書苑",
@@ -148,7 +200,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/86/24/38/8624386d57d77bd6f1502cb53a465583.jpg",
+        "https://th.bing.com/th/id/OIP.TFrre62yShBQLBZTXkI4OgAAAA?w=126&h=182&c=7&r=0&o=5&pid=1.7",
       title: "青春猪头少年不会梦到兔女郎学姐",
       author: "鸭志田一",
       press: "中信出版社",
@@ -163,7 +215,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/7f/06/13/7f061349f720330e27c93802e42ed4fb.jpg",
+        "https://th.bing.com/th/id/OIP.dkqqpqYc8kZZZqHJIkv4iQAAAA?w=204&h=299&c=7&r=0&o=5&pid=1.7",
       title: "日本动漫绘画中的线条设计",
       author: "上村雅春",
       press: "电子工业出版社",
@@ -178,7 +230,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/ad/07/3a/ad073a4a3b1690ba5d363f9c59b785b3.jpg",
+        "https://th.bing.com/th/id/OIP.LNQKoXZDxBt5KE9DnXRp7AHaJo?w=204&h=265&c=7&r=0&o=5&pid=1.7",
       title:
         "你不知道的JavaScript（上卷）= You Don’t Know JS Scope & closures this & object prototypes",
       author: "Kyle Simpson",
@@ -194,7 +246,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/64/6c/d7/646cd72f167420516ef79b88700dc8d1.jpg",
+        "https://th.bing.com/th/id/OIP.FeR3-SnwqU7yTOQEqC68kgHaKb?w=145&h=205&c=7&r=0&o=5&pid=1.7",
       title: "算法导论（原书第3版）",
       author: "Thomas H.Cormen",
       press: "机械工业出版社",
@@ -209,7 +261,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/4e/11/21/4e11216a86a3fd10a79e02de9e4e3e51.jpg",
+        "https://th.bing.com/th/id/OIP.-AfreNRzWTDfpWxYhqIzpAAAAA?w=153&h=180&c=7&r=0&o=5&pid=1.7",
       title:
         "英雄联盟：符文之地的故事（英雄联盟十周年纪念；拳头游戏官方出品；官方宇宙设定集；十年青春，此生无悔入联盟！）",
       author: "美国拳头游戏",
@@ -225,7 +277,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/c2/48/08/c2480807e34a24e8c2033719c2b3a7f4.jpg",
+        "https://th.bing.com/th/id/OIP.VmncT2M9BcViQgdzeXxHxgHaJw?w=153&h=201&c=7&r=0&o=5&pid=1.7",
       title: "素描的诀窍",
       author: "[美] 伯特·多德森",
       press: "上海人民美术出版社",
@@ -240,7 +292,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/97/ec/db/97ecdbcf09c0b5ef67f4df7806c50ec9.jpg",
+        "https://th.bing.com/th/id/OIP.LyU84f5ZzPxjFYc-tr3C8QAAAA?w=204&h=204&c=7&r=0&o=5&pid=1.7",
       title: "伯里曼人体结构绘画教学",
       author: "乔治·伯里曼",
       press: "广西美术出版社",
@@ -255,7 +307,7 @@ const state = reactive({
     },
     {
       imgUrl:
-        "https://covers.zlibcdn2.com/covers299/books/10/df/e5/10dfe5485f01e3fa079786d2838af2bd.jpg",
+        "https://th.bing.com/th/id/OIP.TA2s0gBWWy_DBwG572BHoQAAAA?w=132&h=180&c=7&r=0&o=5&pid=1.7",
       title: "Linux内核设计的艺术: 图解Linux操作系统架构设计与实现原理",
       author: "新设计团队",
       press: "机械工业出版社华章公司",
@@ -274,14 +326,28 @@ const state = reactive({
     total: 985014,
     pageSize: 10,
   },
+  // 搜索框数据
+  searchBoxData:{
+    type:"title",
+    value:""
+  }
+});
+
+// 页面初始化
+
+onMounted(() => {
+  reqInterface.userLogin({ postId: 1 }).then((res) => {
+    console.log(res);
+  });
 });
 
 // 搜索逻辑
 function onSearch() {
-  if (searchValue.value === "") {
+  if (state.searchBoxData.value === "") {
     message.error("输入内容为空，请检查！");
     return;
   }
+  console.log(state.searchBoxData)
 }
 // 跳转详情逻辑
 function openDetailsView(target) {
@@ -293,16 +359,11 @@ function clickPagination(index, page) {
   document.scrollingElement.scrollTop = 0;
   console.log(index, page);
 }
-// 开启二级树逻辑
-function onShowDrawer() {
-  visible.value = !visible.value;
-}
+
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
-  const reg = /-/g;
-  if (reg.test(node[0])) {
-    console.log(node[0]);
-  }
+  // const reg = /-/g;
+  console.log(node);
 }
 </script>
 
@@ -314,7 +375,7 @@ function clickTreeNode(node) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 970px;
+    width: 63%;
     margin: 0 auto;
     padding: 0 15px;
     .logoBox {
@@ -323,6 +384,10 @@ function clickTreeNode(node) {
       width: 400px;
       text-align: center;
       margin-top: 50px;
+      img {
+        object-fit: contain;
+        width: 100%;
+      }
       span {
         color: #90a5a8;
         font-weight: 400;
@@ -332,6 +397,9 @@ function clickTreeNode(node) {
     }
     .searchBox {
       width: 100%;
+      #SearchBoxForm{
+        display: flex;
+      }
       .categorySearch {
         display: inline-block;
         padding-top: 15px;
@@ -341,13 +409,29 @@ function clickTreeNode(node) {
         cursor: pointer;
       }
     }
-    .bookList {
+    #peCategorySearch {
+      display: none;
+    }
+    main {
       width: 100%;
+      display: flex;
+      justify-content: space-between;
       margin-top: 40px;
-      border: 1px solid #aaa;
-      background: #fff;
-      .bookItem:nth-last-child(1) {
-        border-bottom: none;
+      .pcTreeBox {
+        width: 23%;
+        background: #f6f6f6;
+        border-radius: 5px;
+        .ant-carousel {
+          margin-bottom: 25px;
+        }
+      }
+      .bookList {
+        width: 75%;
+        border: 1px solid #aaa;
+        background: #fff;
+        .bookItem:nth-last-child(1) {
+          border-bottom: none;
+        }
       }
     }
     .ant-pagination {
@@ -374,6 +458,20 @@ function clickTreeNode(node) {
     .container {
       width: 100%;
       padding: 0 15px;
+      #pcCategorySearch {
+        display: none;
+      }
+      #peCategorySearch {
+        display: inline-block;
+      }
+      main {
+        .pcTreeBox {
+          display: none;
+        }
+        .bookList {
+          width: 100%;
+        }
+      }
     }
   }
 }

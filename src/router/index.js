@@ -20,10 +20,10 @@ const routes = [
         component: () => import("../views/Home/BookListView.vue"),
       },
       {
-        path:"/home/details",
-        name:"home-details",
-        component:() => import("../views/Home/Details.vue")
-      }
+        path: "/home/details",
+        name: "home-details",
+        component: () => import("../views/Home/Details.vue"),
+      },
     ],
   },
   {
@@ -32,25 +32,28 @@ const routes = [
     component: () => import("../views/Login/LoginView.vue"),
   },
   {
-    path:"/test",
-    name:"test",
-    component:()=>import("../views/test.vue")
+    path: "/test",
+    name: "test",
+    component: () => import("../views/test.vue"),
   },
-  // {
-  //   // 404
-  //   path: "/404",
-  //   name: "404",
-  //   component: () => import("../views/404"),
-  // },
-  // {
-  //   path: "/:pathMatch(.*)",
-  //   redirect: "/404",
-  // },
+  {
+    // 404
+    path: "/404",
+    name: "404",
+    component: () => import("../views/404"),
+  },
+  {
+    path: "/:pathMatch(.*)",
+    redirect: "/404",
+  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
 });
 
 export default router;

@@ -7,4 +7,14 @@ module.exports = defineConfig({
       return args;
     });
   },
+  devServer: {
+    port: 8080,
+    proxy: {
+      "": {
+        target: "http://jsonplaceholder.typicode.com/",
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  },
 });

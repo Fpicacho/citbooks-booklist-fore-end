@@ -10,7 +10,7 @@
         style="margin-bottom: 20px"
       />
       <!-- 面包导航 -->
-      <a-breadcrumb :routes="routes" style="margin: 20px 0">
+      <a-breadcrumb :routes="routes" style="margin: 0; margin-bottom: 20px">
         <template #itemRender="{ route, params, routes, paths }">
           <span v-if="routes.indexOf(route) === routes.length - 1">{{
             route.breadcrumbName
@@ -135,7 +135,7 @@
             />
           </a-form-item>
           <a-form-item
-            label="类型"
+            label="职业类型"
             name="type"
             :rules="[{ required: true, message: '请选择类型' }]"
           >
@@ -280,10 +280,11 @@ const columns = [
 ];
 const visible = ref(false);
 const types = [
-  { label: "专科生", value: "zhuanke" },
-  { label: "本科生", value: "benke" },
-  { label: "硕士研究生", value: "shuoshi" },
-  { label: "博士研究生", value: "boshi" },
+  { label: "教师", value: "教师" },
+  { label: "学生", value: "学生" },
+  { label: "管理", value: "管理" },
+  { label: "研究", value: "研究" },
+  { label: "其他", value: "其他" },
 ];
 const state = reactive({
   formState: {
@@ -348,12 +349,13 @@ function outputExcel() {
 }
 // 提交表单逻辑
 function onFinish(values) {
-  SetloadingState(true);
+  // SetloadingState(true);
   const isbns = [];
   BOOK_LIST.value.forEach((item) => {
     isbns.push(item.isbn);
   });
   values.isbns = isbns;
+  console.log(values);
 }
 </script>
 
