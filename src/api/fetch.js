@@ -4,6 +4,7 @@ import qs from "qs";
 import { useLoadingStateStore } from "../store/loadingStateStore";
 const { SetloadingState } = useLoadingStateStore();
 import { message } from "ant-design-vue";
+import utility from '../utility/index';
 
 const fetch = axios.create({
   // baseURL: "http://218.94.19.14:50101/",
@@ -38,6 +39,9 @@ fetch.interceptors.response.use(
           break;
         case "-1":
           // 权限错误
+          message.error('权限不足，或书展已关闭，请重新登录！');
+          localStorage.clear()
+          utility.goTo('login')
           break;
       }
     }
