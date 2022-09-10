@@ -1,10 +1,7 @@
 <template>
   <div class="header">
     <div class="l">
-      <a-tag
-        color="#f50"
-        >海洋大学</a-tag
-      >
+      <a-tag color="#f50">{{ USER_INFO.bookShowName }}</a-tag>
       <a-tag color="#2db7f5">共123745本书</a-tag>
       <a-tag
         color="#87d068"
@@ -57,13 +54,15 @@
 import { ref } from "vue";
 import { MenuOutlined } from "@ant-design/icons-vue";
 import utility from "../../utility/index";
+import { useUserInfoStore } from "../../store/userInfoStore";
+const { USER_INFO } = useUserInfoStore();
 
 const visible = ref(false);
 
 function handleMenuClick(flag) {
   switch (flag.key) {
     case "1":
-    utility.goTo('home-bookList')
+      utility.goTo("home-bookList");
       break;
     case "2":
       visible.value = true;
@@ -76,7 +75,8 @@ function hideModal(flag) {
       visible.value = false;
       break;
     case "logOut":
-      console.log("执行登出逻辑");
+      localStorage.clear(); 
+      location.reload();
       break;
   }
 }

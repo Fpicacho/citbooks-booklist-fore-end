@@ -3,9 +3,10 @@ import axios from "axios";
 import qs from "qs";
 import { useLoadingStateStore } from "../store/loadingStateStore";
 const { SetloadingState } = useLoadingStateStore();
-import { message } from 'ant-design-vue';
+import { message } from "ant-design-vue";
 
 const fetch = axios.create({
+  // baseURL: "http://218.94.19.14:50101/",
   timeout: 10000,
 });
 
@@ -24,17 +25,31 @@ fetch.interceptors.request.use(
 
 // 添加响应拦截器
 fetch.interceptors.response.use(
+  // 2xx 范围内的状态码都会触发该函数。
   function (response) {
-    // 2xx 范围内的状态码都会触发该函数。
-    // 对响应数据做点什么
+    if (response.data.success === "1") {
+      SetloadingState(false);
+      return response;
+    } else {
+      switch (response.data.success) {
+        case "0":
+          // 通常错误
+          message.error(response.data.msg);
+          break;
+        case "-1":
+          // 权限错误
+          break;
+      }
+    }
     SetloadingState(false);
     return response;
   },
   function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     if (error.message.includes("timeout")) {
-      message.error('当前服务状态拥挤，或网络环境不佳，请稍后重试。');
-      console.log("请求超时:", error);
+      message.error("当前服务状态拥挤，或网络环境不佳，请稍后重试。");
+    } else {
+      message.error(`${error.response.status}:${error.response.statusText}`);
     }
     SetloadingState(false);
     return Promise.reject(error);

@@ -5,7 +5,7 @@
       <!-- logo -->
       <div class="logoBox">
         <img src="../../assets/img/logo.png" alt="" />
-        <span>CtiBooks项目中的一部分,线上书展服务。</span>
+        <span>创新、诚信、服务、求实</span>
       </div>
       <!-- 搜索框 -->
       <div class="searchBox">
@@ -16,8 +16,11 @@
             <a-select-option value="press">出版社</a-select-option>
             <a-select-option value="isbn">ISBN</a-select-option>
           </a-select>
-          <a-input v-model:value="state.searchBoxData.value" placeholder="请输入检索内容"/>
-          <a-button type="primary" @click=onSearch>搜索</a-button>
+          <a-input
+            v-model:value="state.searchBoxData.value"
+            placeholder="请输入检索内容"
+          />
+          <a-button type="primary" @click="onSearch">搜索</a-button>
         </a-input-group>
         <span
           id="peCategorySearch"
@@ -25,13 +28,20 @@
           @click="visible = !visible"
           >按分类搜索</span
         >
-        <span id="pcCategorySearch" class="categorySearch">共计15272本书</span>
+        <span id="pcCategorySearch" class="categorySearch"
+          >共检索到{{ state.pager.total }}本书</span
+        >
       </div>
       <main>
         <!-- pc端二级书容器 -->
         <div class="pcTreeBox">
           <a-image-preview-group>
-            <a-carousel autoplay>
+            <a-carousel
+              autoplay
+              effect="fade"
+              :autoplaySpeed="6000"
+              :speed="1000"
+            >
               <a-image
                 v-for="(item, index) in state.bannerList"
                 :key="index"
@@ -51,10 +61,11 @@
             <a-tree
               v-if="state.treeData.length"
               :tree-data="state.treeData"
+              :field-names="fieldNames"
               :block-node="true"
               @check="clickTreeNode"
               :checkable="true"
-            />
+            ></a-tree>
           </div>
         </div>
         <!-- 图书列表容器 -->
@@ -83,6 +94,7 @@
       <!-- 分页器 -->
       <a-pagination
         :total="state.pager.total"
+        :current="state.pager.current"
         :page-size="state.pager.pageSize"
         show-less-items
         @change="clickPagination"
@@ -99,10 +111,11 @@
         <a-tree
           v-if="state.treeData.length"
           :tree-data="state.treeData"
+          :field-names="fieldNames"
           :block-node="true"
           @check="clickTreeNode"
           :checkable="true"
-        />
+        ></a-tree>
       </a-drawer>
     </div>
   </div>
@@ -117,8 +130,14 @@ import utility from "../../utility/index";
 import reqInterface from "../../api/reqInterface";
 
 import { useBookListStore } from "../../store/bookListStore";
+import { useUserInfoStore } from "../../store/userInfoStore";
 const { SetBookListItem } = useBookListStore();
+const { USER_INFO } = useUserInfoStore();
 
+const fieldNames = {
+  title: "name",
+  key: "id",
+};
 const visible = ref(false);
 const state = reactive({
   // 轮播数据
@@ -130,214 +149,48 @@ const state = reactive({
   // 二级树数据
   treeData: [
     {
-      title: "文化、科学、教育、体育",
-      key: "computer",
-      children: [
-        {
-          title: "编程语言",
-          key: "computer-programming",
-        },
-        {
-          title: "系统开发",
-          key: "computer-systemDeveLopment",
-        },
-        {
-          title: "编程算法",
-          key: "computer-algorithm",
-        },
-      ],
-    },
-    {
-      title: "小说",
-      key: "Anovel",
-      children: [
-        {
-          title: "武打",
-          key: "Anovel-wuda",
-        },
-        {
-          title: "武侠",
-          key: "Anovel-wuxia",
-        },
-        {
-          title: "科幻",
-          key: "Anovel-kehuan",
-        },
-      ],
+      name: "载入中...",
+      id: "computer",
     },
   ],
   // 图书列表数据
   bookListData: [
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.JVLKy4czE7GaNNunNMofXAHaIp?w=176&h=206&c=7&r=0&o=5&pid=1.7",
-      title: "斗罗大陆",
-      author: "唐家三少",
-      press: "湖南少年儿童出版社",
-      category: "计算机-编程",
-      isbn: "7556242331",
-      clcNo: "A10",
-      binding: "锁线胶订",
-      pages: 931,
-      monetary: "人民币",
-      price: 80,
-      supplyInfo: "库存现货，数量1",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.udJmEu3EFv13pStbKkkD0gAAAA?w=204&h=290&c=7&r=0&o=5&pid=1.7",
-      title: "科学的超电磁炮 SS 1",
-      author: "镰池和馬",
-      press: "epub掌上書苑",
-      category: "计算机-编程",
-      isbn: "1174981576",
-      clcNo: "B122",
-      binding: "锁线胶订",
-      pages: 150,
-      monetary: "人民币",
-      price: 30,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.TFrre62yShBQLBZTXkI4OgAAAA?w=126&h=182&c=7&r=0&o=5&pid=1.7",
-      title: "青春猪头少年不会梦到兔女郎学姐",
-      author: "鸭志田一",
-      press: "中信出版社",
-      category: "计算机-编程",
-      isbn: "B072C29BL1",
-      clcNo: "B22",
-      binding: "方背平脊精装",
-      pages: 999,
-      monetary: "美元",
-      price: 100,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.dkqqpqYc8kZZZqHJIkv4iQAAAA?w=204&h=299&c=7&r=0&o=5&pid=1.7",
-      title: "日本动漫绘画中的线条设计",
-      author: "上村雅春",
-      press: "电子工业出版社",
-      category: "计算机-编程",
-      isbn: "7121310074",
-      clcNo: "Z12",
-      binding: "锁线胶订",
-      pages: 200,
-      monetary: "日元",
-      price: 5000,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.LNQKoXZDxBt5KE9DnXRp7AHaJo?w=204&h=265&c=7&r=0&o=5&pid=1.7",
-      title:
-        "你不知道的JavaScript（上卷）= You Don’t Know JS Scope & closures this & object prototypes",
-      author: "Kyle Simpson",
-      press: "人民邮电出版社",
-      category: "计算机-编程",
-      isbn: "7115385734",
-      clcNo: "C32",
-      binding: "锁线胶订",
-      pages: 213,
-      monetary: "人民币",
-      price: 30,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.FeR3-SnwqU7yTOQEqC68kgHaKb?w=145&h=205&c=7&r=0&o=5&pid=1.7",
-      title: "算法导论（原书第3版）",
-      author: "Thomas H.Cormen",
-      press: "机械工业出版社",
-      category: "计算机-编程",
-      isbn: "7111407016",
-      clcNo: "P02",
-      binding: "锁线胶订",
-      pages: 415,
-      monetary: "人民币",
-      price: 99,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.-AfreNRzWTDfpWxYhqIzpAAAAA?w=153&h=180&c=7&r=0&o=5&pid=1.7",
-      title:
-        "英雄联盟：符文之地的故事（英雄联盟十周年纪念；拳头游戏官方出品；官方宇宙设定集；十年青春，此生无悔入联盟！）",
-      author: "美国拳头游戏",
-      press: "中信出版集团",
-      category: "计算机-编程",
-      isbn: "7521717031",
-      clcNo: "Q84",
-      binding: "锁线胶订",
-      pages: 555,
-      monetary: "人民币",
-      price: 199,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.VmncT2M9BcViQgdzeXxHxgHaJw?w=153&h=201&c=7&r=0&o=5&pid=1.7",
-      title: "素描的诀窍",
-      author: "[美] 伯特·多德森",
-      press: "上海人民美术出版社",
-      category: "计算机-编程",
-      isbn: "7532228703",
-      clcNo: "F43",
-      binding: "锁线胶订",
-      pages: 200,
-      monetary: "人民币",
-      price: 70,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.LyU84f5ZzPxjFYc-tr3C8QAAAA?w=204&h=204&c=7&r=0&o=5&pid=1.7",
-      title: "伯里曼人体结构绘画教学",
-      author: "乔治·伯里曼",
-      press: "广西美术出版社",
-      category: "计算机-编程",
-      isbn: "7806740651",
-      clcNo: "P44",
-      binding: "锁线胶订",
-      pages: 200,
-      monetary: "人民币",
-      price: 55,
-      supplyInfo: "现货，三个月内到货",
-    },
-    {
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.TA2s0gBWWy_DBwG572BHoQAAAA?w=132&h=180&c=7&r=0&o=5&pid=1.7",
-      title: "Linux内核设计的艺术: 图解Linux操作系统架构设计与实现原理",
-      author: "新设计团队",
-      press: "机械工业出版社华章公司",
-      category: "计算机-编程",
-      isbn: "7111347447",
-      clcNo: "I43",
-      binding: "锁线胶订",
-      pages: 800,
-      monetary: "人民币",
-      price: 180,
-      supplyInfo: "现货，三个月内到货",
-    },
+    // {
+    //   imgUrl:
+    //     "https://th.bing.com/th/id/OIP.JVLKy4czE7GaNNunNMofXAHaIp?w=176&h=206&c=7&r=0&o=5&pid=1.7",
+    //   title: "斗罗大陆",
+    //   author: "唐家三少",
+    //   press: "湖南少年儿童出版社",
+    //   category: "计算机-编程",
+    //   isbn: "7556242331",
+    //   clcNo: "A10",
+    //   binding: "锁线胶订",
+    //   pages: 931,
+    //   monetary: "人民币",
+    //   price: 80,
+    //   supplyInfo: "库存现货，数量1",
+    // }
   ],
   // 分页器数据
   pager: {
-    total: 985014,
-    pageSize: 10,
+    total: 0, // 数据总数
+    current: 1, // 当前页数
+    pageSize: 10, // 每页条数
   },
   // 搜索框数据
-  searchBoxData:{
-    type:"title",
-    value:""
-  }
+  searchBoxData: {
+    type: "title",
+    value: "",
+  },
 });
 
 // 页面初始化
-
 onMounted(() => {
-  reqInterface.userLogin({ postId: 1 }).then((res) => {
-    console.log(res);
+  // categoryTreeNode({ bookShowId: USER_INFO.bookShowId });
+  bookCategorySearch({
+    bookShowId: USER_INFO.bookShowId,
+    pages: state.pager.current,
+    length: state.pager.pageSize,
   });
 });
 
@@ -347,23 +200,65 @@ function onSearch() {
     message.error("输入内容为空，请检查！");
     return;
   }
-  console.log(state.searchBoxData)
+  console.log(state.searchBoxData);
 }
+
 // 跳转详情逻辑
 function openDetailsView(target) {
   utility.goTo("home-details", { isbn: target });
 }
+
 // 点击分页器逻辑
 function clickPagination(index, page) {
+  state.pager.current = index;
   state.pager.pageSize = page;
+  bookCategorySearch({
+    bookShowId: USER_INFO.bookShowId,
+    pages: state.pager.current,
+    length: state.pager.pageSize,
+  });
   document.scrollingElement.scrollTop = 0;
-  console.log(index, page);
 }
 
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
   // const reg = /-/g;
   console.log(node);
+}
+
+// 获取二级树数据
+function categoryTreeNode(params) {
+  reqInterface.categoryTreeNode(params).then((res) => {
+    state.treeData = res.data.data;
+  });
+}
+// 获取图书列表数据
+function bookCategorySearch(params) {
+  reqInterface.bookCategorySearch(params).then((res) => {
+    state.pager.total = res.data.length;
+    state.bookListData = [];
+    res.data.paDatas.forEach((item) => {
+      state.bookListData.push(bookItemPure(item));
+    });
+  });
+}
+
+// 图书列表数据纯净化
+function bookItemPure(value) {
+  return {
+    imgUrl: `http://www.ctibooks.com.cn/img/${value.isbn}.jpg`,
+    title: `${value.chineseTitle} ${value.title}`,
+    author: `${value.author}`,
+    press: `${value.publisherName} ${value.publishYear}`,
+    category: `${value.category1}-${value.category2}`,
+    isbn: value.isbn,
+    clcNo: value.clc,
+    binding: value.binding,
+    pages: value.pageSize,
+    monetary: value.currency,
+    price: value.price,
+    supplyInfo: value.supplyInfo,
+  };
 }
 </script>
 
@@ -383,7 +278,6 @@ function clickTreeNode(node) {
       flex-direction: column;
       width: 400px;
       text-align: center;
-      margin-top: 50px;
       img {
         object-fit: contain;
         width: 100%;
@@ -393,11 +287,12 @@ function clickTreeNode(node) {
         font-weight: 400;
         padding: 4px 0 15px 0;
         font-style: italic;
+        margin-bottom: 50px;
       }
     }
     .searchBox {
       width: 100%;
-      #SearchBoxForm{
+      #SearchBoxForm {
         display: flex;
       }
       .categorySearch {
@@ -483,6 +378,10 @@ function clickTreeNode(node) {
       padding: 0 15px;
       .logoBox {
         width: 300px;
+        margin-top: 25px;
+        span {
+          margin-bottom: 25px;
+        }
       }
     }
   }

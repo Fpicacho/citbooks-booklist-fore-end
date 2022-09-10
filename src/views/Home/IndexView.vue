@@ -2,19 +2,19 @@
   <!-- Home系下路由出口 src\views\Home\IndexView.vue-->
   <div class="indexView">
     <Header></Header>
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" v-if="$route.meta.keepAlive" />
+      </keep-alive>
+      <component :is="Component" v-if="!$route.meta.keepAlive" />
+    </router-view>
     <Footer></Footer>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import Header from "../../components/home/Header.vue";
 import Footer from "../../components/home/Footer.vue";
-
-onMounted(() => {
-  console.log("home");
-});
 </script>
 
 <style lang="scss" scoped></style>

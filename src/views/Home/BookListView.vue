@@ -143,18 +143,18 @@
           </a-form-item>
           <a-form-item
             label="学号"
-            name="mark"
+            name="cardNum"
             :rules="[{ required: true, message: '请输入学号' }]"
           >
             <a-input
-              v-model:value="state.formState.mark"
+              v-model:value="state.formState.cardNum"
               :maxlength="50"
               placeholder="请输入学号"
             />
           </a-form-item>
           <a-form-item
             label="推荐理由"
-            name="recommendedText"
+            name="mark"
             :rules="[
               {
                 required: true,
@@ -163,7 +163,7 @@
             ]"
           >
             <a-textarea
-              v-model:value="state.formState.recommendedText"
+              v-model:value="state.formState.mark"
               :maxlength="5000"
               show-count
               allow-clear
@@ -189,15 +189,18 @@
 import { ref, reactive } from "vue";
 import { RouterLink } from "vue-router";
 import utility from "../../utility/index";
+import reqInterface from "../../api/reqInterface";
 import { message } from "ant-design-vue";
 import * as XLSX from "xlsx";
 import { storeToRefs } from "pinia";
 import { useBookListStore } from "../../store/bookListStore";
 import { useLoadingStateStore } from "../../store/loadingStateStore";
+import { useUserInfoStore } from "../../store/userInfoStore";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
 const { DeleteBookListItem } = useBookListStore();
 const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
 const { SetloadingState } = useLoadingStateStore();
+const { USER_INFO } = useUserInfoStore();
 const routes = [
   {
     name: "home",
@@ -293,8 +296,8 @@ const state = reactive({
     email: "",
     depart: "",
     type: "",
+    cardNum: "",
     mark: "",
-    recommendedText: "",
   },
 });
 
@@ -349,13 +352,20 @@ function outputExcel() {
 }
 // 提交表单逻辑
 function onFinish(values) {
-  // SetloadingState(true);
-  const isbns = [];
-  BOOK_LIST.value.forEach((item) => {
-    isbns.push(item.isbn);
-  });
-  values.isbns = isbns;
-  console.log(values);
+  if (BOOK_LIST.value.length > 0) {
+    SetloadingState(true);
+    const isbns = new Set();
+    BOOK_LIST.value.forEach((item) => {
+      isbns.add(item.isbn);
+    });
+    values.isbn = Array.from(isbns);
+    values.bookShowId = USER_INFO.bookShowId;
+    reqInterface.submitSelectBooks(values).then((res) => {
+      console.log(res.data);
+    });
+  }else{
+    message.error("书单为空，无法上传书单！")
+  }
 }
 </script>
 

@@ -15,17 +15,22 @@
           name="account"
           :rules="[{ required: true, message: '请输入账户!' }]"
         >
-          <a-input placeholder="组织账户" v-model:value="formState.account"/>
+          <a-input placeholder="组织账户" v-model:value="formState.account" />
         </a-form-item>
         <a-form-item
           label=""
           name="password"
           :rules="[{ required: true, message: '请输入密码!' }]"
         >
-          <a-input-password placeholder="请输入密码" v-model:value="formState.password"/>
+          <a-input-password
+            placeholder="请输入密码"
+            v-model:value="formState.password"
+          />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit" style="width:100%">登录</a-button>
+          <a-button type="primary" html-type="submit" style="width: 100%"
+            >登录</a-button
+          >
         </a-form-item>
       </a-form>
       <div class="registerBox">
@@ -45,6 +50,12 @@
 
 <script setup>
 import { ref } from "vue";
+import reqInterface from "../../api/reqInterface";
+import utility from "../../utility/index";
+import { message } from "ant-design-vue";
+import { useUserInfoStore } from "../../store/userInfoStore";
+const { USER_INFO } = useUserInfoStore();
+const { SetBookShowId, SetBookShowName } = useUserInfoStore();
 const visible = ref(false);
 const formState = ref({
   account: "",
@@ -55,10 +66,19 @@ function showModal() {
   visible.value = !visible.value;
 }
 
-
 // 提交表单逻辑
-function onFinish(value){
-  console.log(value)
+function onFinish(value) {
+  reqInterface.userLogin(value).then((res) => {
+    if (res.data.success === "1") {
+      SetBookShowName(res.data.user.bookShowName);
+      SetBookShowId(res.data.user.bookShowId);
+      message.success(`登录成功！欢迎${USER_INFO.bookShowName}`);
+      utility.goTo("home");
+    } else {
+      formState.value.account = "";
+      formState.value.password = "";
+    }
+  });
 }
 </script>
 

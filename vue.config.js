@@ -11,7 +11,7 @@ module.exports = defineConfig({
     port: 8080,
     proxy: {
       "": {
-        target: "http://jsonplaceholder.typicode.com/",
+        target: "http://218.94.19.14:50101/",
         changeOrigin: true,
         ws: true,
       },
