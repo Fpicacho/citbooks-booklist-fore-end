@@ -134,6 +134,7 @@ import { useUserInfoStore } from "../../store/userInfoStore";
 const { SetBookListItem } = useBookListStore();
 const { USER_INFO } = useUserInfoStore();
 
+let categoryList = "";
 const fieldNames = {
   title: "name",
   key: "id",
@@ -186,9 +187,10 @@ const state = reactive({
 
 // 页面初始化
 onMounted(() => {
-  // categoryTreeNode({ bookShowId: USER_INFO.bookShowId });
+  categoryTreeNode({ bookShowId: USER_INFO.bookShowId });
   bookCategorySearch({
     bookShowId: USER_INFO.bookShowId,
+    category: "",
     pages: state.pager.current,
     length: state.pager.pageSize,
   });
@@ -214,6 +216,7 @@ function clickPagination(index, page) {
   state.pager.pageSize = page;
   bookCategorySearch({
     bookShowId: USER_INFO.bookShowId,
+    category: categoryList,
     pages: state.pager.current,
     length: state.pager.pageSize,
   });
@@ -223,13 +226,21 @@ function clickPagination(index, page) {
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
   // const reg = /-/g;
-  console.log(node);
+  categoryList = node.join(",");
+  bookCategorySearch({
+    bookShowId: USER_INFO.bookShowId,
+    category: categoryList,
+    pages: 1,
+    length: state.pager.pageSize,
+  });
+  console.log(categoryList);
 }
 
 // 获取二级树数据
 function categoryTreeNode(params) {
   reqInterface.categoryTreeNode(params).then((res) => {
     state.treeData = res.data.data;
+    console.log(state.treeData);
   });
 }
 // 获取图书列表数据
@@ -322,6 +333,7 @@ function bookItemPure(value) {
       }
       .bookList {
         width: 75%;
+        height: 100%;
         border: 1px solid #aaa;
         background: #fff;
         .bookItem:nth-last-child(1) {

@@ -4,13 +4,14 @@ import qs from "qs";
 import { useLoadingStateStore } from "../store/loadingStateStore";
 const { SetloadingState } = useLoadingStateStore();
 import { message } from "ant-design-vue";
-import utility from '../utility/index';
+import utility from "../utility/index";
 
 const fetch = axios.create({
   // baseURL: "http://218.94.19.14:50101/",
   timeout: 10000,
 });
-
+fetch.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded;charset=UTF-8";
 // 添加请求拦截器
 fetch.interceptors.request.use(
   function (config) {
@@ -39,9 +40,9 @@ fetch.interceptors.response.use(
           break;
         case "-1":
           // 权限错误
-          message.error('权限不足，或书展已关闭，请重新登录！');
-          localStorage.clear()
-          utility.goTo('login')
+          message.error("权限不足，或书展已关闭，请重新登录！");
+          localStorage.clear();
+          utility.goTo("login");
           break;
       }
     }

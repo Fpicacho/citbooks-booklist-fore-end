@@ -17,7 +17,7 @@ export default {
   },
   // 根据类别 书展id获取书目列表数据
   bookCategorySearch(params) {
-    return fetch.get(
+    return fetch.post(
       "/ctiweb/onlinebookshow/bookCategorySearch.action",
       params
     );
