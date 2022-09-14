@@ -86,13 +86,13 @@
       </div>
       <a-tabs v-model:activeKey="activeKey" style="margin-top: 15px">
         <a-tab-pane key="1" tab="图书简介">{{
-          bookDetails.holdingInfo
+          bookDetails.holdingInfo ? bookDetails.holdingInfo : "暂无"
         }}</a-tab-pane>
         <a-tab-pane key="2" tab="获奖信息">{{
-          bookDetails.bookbInfo
+          bookDetails.bookbInfo ? bookDetails.bookbInfo : "暂无"
         }}</a-tab-pane>
         <a-tab-pane key="3" tab="馆藏信息">{{
-          bookDetails.briefInfo
+          bookDetails.eventInfo ? bookDetails.eventInfo : "暂无"
         }}</a-tab-pane>
       </a-tabs>
       <div style="height: 50px"></div>
@@ -167,7 +167,7 @@ function bookInfoDetail() {
 // 图书详情数据纯净化
 function bookDetailsPure(value) {
   return {
-    imgUrl: `http://www.ctibooks.com.cn/img/${value.isbn}.jpg`,
+    imgUrl: `http://www.ctibooks.com.cn/img/bookcover/${value.isbn}.jpg`,
     title: `${value.chineseTitle} ${value.title}`,
     author: `${value.author}`,
     press: `${value.publisherName} ${value.publishYear}`,
@@ -180,7 +180,7 @@ function bookDetailsPure(value) {
     price: value.price,
     supplyInfo: value.supplyInfo,
     bookbInfo: value.awardInfo,
-    briefInfo: "null",
+    eventInfo: value.eventInfo,
     holdingInfo: value.bookInfo,
   };
 }
@@ -278,6 +278,7 @@ function addBookList() {
           flex-direction: column;
           .info-l {
             text-align: center;
+            margin: 20px 0;
           }
         }
       }

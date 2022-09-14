@@ -89,7 +89,7 @@
           </a-form-item>
           <a-form-item
             label="电话"
-            name="telNub"
+            name="telNum"
             :rules="[
               { required: true, message: '请输入电话号码', trigger: 'blur' },
               {
@@ -100,7 +100,7 @@
             ]"
           >
             <a-input
-              v-model:value="state.formState.telNub"
+              v-model:value="state.formState.telNum"
               :maxlength="11"
               placeholder="请输入移动电话号码"
             />
@@ -292,7 +292,7 @@ const types = [
 const state = reactive({
   formState: {
     teachName: "",
-    telNub: "",
+    telNum: "",
     email: "",
     depart: "",
     type: "",
@@ -358,13 +358,15 @@ function onFinish(values) {
     BOOK_LIST.value.forEach((item) => {
       isbns.add(item.isbn);
     });
-    values.isbn = Array.from(isbns);
+    values.userId = USER_INFO.id;
+    values.isbns = Array.from(isbns);
     values.bookShowId = USER_INFO.bookShowId;
+    console.log(values);
     reqInterface.submitSelectBooks(values).then((res) => {
       console.log(res.data);
     });
-  }else{
-    message.error("书单为空，无法上传书单！")
+  } else {
+    message.error("书单为空，无法上传书单！");
   }
 }
 </script>

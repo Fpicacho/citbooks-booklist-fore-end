@@ -2,7 +2,7 @@ import fetch from "./fetch";
 export default {
   // 登录
   userLogin(params) {
-    return fetch.get("/ctiweb/onlinebookshow/userLogin.action", params);
+    return fetch.post("/ctiweb/onlinebookshow/userLogin.action", params);
   },
   // 获取分类信息
   categoryTreeNode(params) {

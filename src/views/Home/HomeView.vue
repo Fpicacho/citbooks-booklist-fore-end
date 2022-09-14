@@ -50,23 +50,26 @@
               />
             </a-carousel>
           </a-image-preview-group>
-          <div
-            style="
-              padding: 16px;
-              box-shadow: 0px 1px 3px #ddd;
-              background: #fff;
-            "
-          >
-            <p>按分类搜索：</p>
-            <a-tree
-              v-if="state.treeData.length"
-              :tree-data="state.treeData"
-              :field-names="fieldNames"
-              :block-node="true"
-              @check="clickTreeNode"
-              :checkable="true"
-            ></a-tree>
-          </div>
+          <a-affix>
+            <div
+              style="
+                padding: 16px;
+                box-shadow: 0px 1px 3px #ddd;
+                background: #fff;
+              "
+            >
+              <p>按分类搜索：</p>
+              <a-tree
+                v-if="state.treeData.length"
+                :tree-data="state.treeData"
+                :field-names="fieldNames"
+                :block-node="true"
+                @check="clickTreeNode"
+                :checkable="true"
+                :height="600"
+              ></a-tree>
+            </div>
+          </a-affix>
         </div>
         <!-- 图书列表容器 -->
         <div class="bookList">
@@ -226,21 +229,20 @@ function clickPagination(index, page) {
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
   // const reg = /-/g;
-  categoryList = node.join(",");
+  categoryList = node.join(";");
+  state.pager.current = 1;
   bookCategorySearch({
     bookShowId: USER_INFO.bookShowId,
     category: categoryList,
     pages: 1,
     length: state.pager.pageSize,
   });
-  console.log(categoryList);
 }
 
 // 获取二级树数据
 function categoryTreeNode(params) {
   reqInterface.categoryTreeNode(params).then((res) => {
     state.treeData = res.data.data;
-    console.log(state.treeData);
   });
 }
 // 获取图书列表数据
@@ -257,7 +259,7 @@ function bookCategorySearch(params) {
 // 图书列表数据纯净化
 function bookItemPure(value) {
   return {
-    imgUrl: `http://www.ctibooks.com.cn/img/${value.isbn}.jpg`,
+    imgUrl: `http://www.ctibooks.com.cn/img/bookcover/${value.isbn}.jpg`,
     title: `${value.chineseTitle} ${value.title}`,
     author: `${value.author}`,
     press: `${value.publisherName} ${value.publishYear}`,
