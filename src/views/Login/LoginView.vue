@@ -55,7 +55,7 @@ import utility from "../../utility/index";
 import { message } from "ant-design-vue";
 import { useUserInfoStore } from "../../store/userInfoStore";
 const { USER_INFO } = useUserInfoStore();
-const { SetBookShowId, SetBookShowName, SetId, SetBookCount } =
+const { SetBookShowId, SetBookShowName, SetId, SetBookCount,SetBannerList } =
   useUserInfoStore();
 const visible = ref(false);
 const formState = ref({
@@ -71,10 +71,11 @@ function showModal() {
 function onFinish(value) {
   reqInterface.userLogin(value).then((res) => {
     if (res.data.success === "1") {
-      SetBookShowName(res.data.user.bookShowName);
+      SetBookShowName(res.data.user.schoolName);
       SetBookShowId(res.data.user.bookShowId);
       SetId(res.data.user.id);
       SetBookCount(res.data.user.bookCount);
+      SetBannerList(res.data.user.imgUrls)
       message.success(`登录成功！欢迎${USER_INFO.bookShowName}`);
       utility.goTo("home");
     } else {

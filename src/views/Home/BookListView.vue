@@ -167,7 +167,7 @@
               :maxlength="5000"
               show-count
               allow-clear
-              placeholder="需有限采购或者自荐书单的书请写在推荐理由中，多个ISBN号之间可以使用;分割。"
+              placeholder="推荐/采购理由"
             />
           </a-form-item>
           <a-form-item>
@@ -281,7 +281,6 @@ const columns = [
     fixed: "right",
   },
 ];
-const visible = ref(false);
 const types = [
   { label: "教师", value: "教师" },
   { label: "学生", value: "学生" },
@@ -300,7 +299,7 @@ const state = reactive({
     mark: "",
   },
 });
-
+let visible = ref(false);
 // 导出Excel逻辑
 function outputExcel() {
   if (BOOK_LIST.value.length > 0) {
@@ -361,9 +360,9 @@ function onFinish(values) {
     values.userId = USER_INFO.id;
     values.isbns = Array.from(isbns).join(";");
     values.bookShowId = USER_INFO.bookShowId;
-    console.log(values);
     reqInterface.submitSelectBooks(values).then((res) => {
-      console.log(res.data);
+      message.success("书单已经成功提交至云端！");
+      visible.value = false;
     });
   } else {
     message.error("书单为空，无法上传书单！");

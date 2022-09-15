@@ -86,10 +86,10 @@
       </div>
       <a-tabs v-model:activeKey="activeKey" style="margin-top: 15px">
         <a-tab-pane key="1" tab="图书简介">{{
-          bookDetails.holdingInfo ? bookDetails.holdingInfo : "暂无"
+          bookDetails.description ? bookDetails.description : "暂无"
         }}</a-tab-pane>
         <a-tab-pane key="2" tab="获奖信息">{{
-          bookDetails.bookbInfo ? bookDetails.bookbInfo : "暂无"
+          bookDetails.awardInfo ? bookDetails.awardInfo : "暂无"
         }}</a-tab-pane>
         <a-tab-pane key="3" tab="馆藏信息">{{
           bookDetails.eventInfo ? bookDetails.eventInfo : "暂无"
@@ -182,9 +182,9 @@ function bookDetailsPure(value) {
     monetary: value.currency,
     price: value.price,
     supplyInfo: value.supplyInfo,
-    bookbInfo: value.awardInfo,
+    description: value.description,
+    awardInfo: value.awardInfo,
     eventInfo: value.eventInfo,
-    holdingInfo: value.bookInfo,
   };
 }
 

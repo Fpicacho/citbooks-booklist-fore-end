@@ -8,6 +8,7 @@ export const useUserInfoStore = defineStore("userInfoStore", {
         bookShowId: "",
         id: "",
         bookCount: "",
+        bannerList: [],
       },
     };
   },
@@ -23,6 +24,10 @@ export const useUserInfoStore = defineStore("userInfoStore", {
     },
     SetBookCount(value) {
       this.USER_INFO.bookCount = value;
+    },
+    SetBannerList(value) {
+      const list = value.split(";");
+      this.USER_INFO.bannerList = list;
     },
   },
 

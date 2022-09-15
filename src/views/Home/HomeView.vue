@@ -11,10 +11,11 @@
       <div class="searchBox">
         <a-input-group compact id="SearchBoxForm">
           <a-select v-model:value="state.searchBoxData.type">
-            <a-select-option value="title">书名</a-select-option>
-            <a-select-option value="author">作者名</a-select-option>
-            <a-select-option value="press">出版社</a-select-option>
+            <a-select-option value="keyword">关键字</a-select-option>
             <a-select-option value="isbn">ISBN</a-select-option>
+            <a-select-option value="pubyear">出版年</a-select-option>
+            <a-select-option value="pub">出版社</a-select-option>
+            <a-select-option value="title">题名</a-select-option>
           </a-select>
           <a-input
             v-model:value="state.searchBoxData.value"
@@ -26,10 +27,13 @@
           id="peCategorySearch"
           class="categorySearch"
           @click="visible = !visible"
-          >按分类搜索</span
+          >点击按分类搜索 (共检索到
+          <span style="color: #e94235">{{ state.pager.total }}</span>
+          本书)</span
         >
         <span id="pcCategorySearch" class="categorySearch"
-          >共检索到{{ state.pager.total }}本书</span
+          >共检索到
+          <span style="color: #e94235">{{ state.pager.total }}</span> 本书</span
         >
       </div>
       <main>
@@ -146,10 +150,7 @@ const fieldNames = {
 const visible = ref(false);
 const state = reactive({
   // 轮播数据
-  bannerList: [
-    "http://www.ctibooks.com.cn/img/banner/2.jpg",
-    "http://www.ctibooks.com.cn/img/banner/1.jpg"
-  ],
+  bannerList: [],
   // 二级树数据
   treeData: [
     {
@@ -167,13 +168,14 @@ const state = reactive({
   },
   // 搜索框数据
   searchBoxData: {
-    type: "title",
+    type: "keyword",
     value: "",
   },
 });
 
 // 页面初始化
 onMounted(() => {
+  state.bannerList = USER_INFO.bannerList;
   categoryTreeNode({ bookShowId: USER_INFO.bookShowId });
   bookCategorySearch({
     bookShowId: USER_INFO.bookShowId,
