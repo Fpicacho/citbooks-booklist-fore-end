@@ -2,7 +2,7 @@
   <div class="header">
     <div class="l">
       <a-tag color="#f50">{{ USER_INFO.bookShowName }}</a-tag>
-      <a-tag color="#2db7f5">共123745本书</a-tag>
+      <a-tag color="#2db7f5">共{{USER_INFO.bookCount}}本书</a-tag>
       <a-tag
         color="#87d068"
         style="cursor: pointer"

@@ -130,6 +130,7 @@ import BookItem from "../../components/home/homeView/BookItem.vue";
 import { message } from "ant-design-vue";
 
 import utility from "../../utility/index";
+import GlobalConfig from "../../config/index";
 import reqInterface from "../../api/reqInterface";
 
 import { useBookListStore } from "../../store/bookListStore";
@@ -146,9 +147,8 @@ const visible = ref(false);
 const state = reactive({
   // 轮播数据
   bannerList: [
-    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGNjZjlmNGU2MDIxMGMwYzBhM2NkMDMQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
-    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGQ2ZWZlOGU1MDIxMGY0OTNkNWIxMDYQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
-    "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChgwOGMzYTI5MWU2MDIxMGViYTY5YWYyMDEQmMzXLw.png?x-oss-process=image/resize,m_fill,w_964,h_494",
+    "http://www.ctibooks.com.cn/img/banner/2.jpg",
+    "http://www.ctibooks.com.cn/img/banner/1.jpg"
   ],
   // 二级树数据
   treeData: [
@@ -158,23 +158,7 @@ const state = reactive({
     },
   ],
   // 图书列表数据
-  bookListData: [
-    // {
-    //   imgUrl:
-    //     "https://th.bing.com/th/id/OIP.JVLKy4czE7GaNNunNMofXAHaIp?w=176&h=206&c=7&r=0&o=5&pid=1.7",
-    //   title: "斗罗大陆",
-    //   author: "唐家三少",
-    //   press: "湖南少年儿童出版社",
-    //   category: "计算机-编程",
-    //   isbn: "7556242331",
-    //   clcNo: "A10",
-    //   binding: "锁线胶订",
-    //   pages: 931,
-    //   monetary: "人民币",
-    //   price: 80,
-    //   supplyInfo: "库存现货，数量1",
-    // }
-  ],
+  bookListData: [],
   // 分页器数据
   pager: {
     total: 0, // 数据总数
@@ -259,7 +243,7 @@ function bookCategorySearch(params) {
 // 图书列表数据纯净化
 function bookItemPure(value) {
   return {
-    imgUrl: `http://www.ctibooks.com.cn/img/bookcover/${value.isbn}.jpg`,
+    imgUrl: `${GlobalConfig.imgServeUrl}${value.isbn}.jpg`,
     title: `${value.chineseTitle} ${value.title}`,
     author: `${value.author}`,
     press: `${value.publisherName} ${value.publishYear}`,

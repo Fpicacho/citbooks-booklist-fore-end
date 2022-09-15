@@ -7,6 +7,7 @@ export const useUserInfoStore = defineStore("userInfoStore", {
         bookShowName: "",
         bookShowId: "",
         id: "",
+        bookCount: "",
       },
     };
   },
@@ -19,6 +20,9 @@ export const useUserInfoStore = defineStore("userInfoStore", {
     },
     SetId(value) {
       this.USER_INFO.id = value;
+    },
+    SetBookCount(value) {
+      this.USER_INFO.bookCount = value;
     },
   },
 

@@ -4,11 +4,14 @@ import qs from "qs";
 import { useLoadingStateStore } from "../store/loadingStateStore";
 const { SetloadingState } = useLoadingStateStore();
 import { message } from "ant-design-vue";
+import GlobalConfig from "../config/index";
 import utility from "../utility/index";
 
+let development = process.env.NODE_ENV == "development" ? true : false;
+
 const fetch = axios.create({
-  // baseURL: "http://218.94.19.14:50101/",
-  timeout: 10000,
+  baseURL: development ? "" : GlobalConfig.serverUrl,
+  timeout: GlobalConfig.reqTimeout,
 });
 fetch.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";

@@ -359,7 +359,7 @@ function onFinish(values) {
       isbns.add(item.isbn);
     });
     values.userId = USER_INFO.id;
-    values.isbns = Array.from(isbns);
+    values.isbns = Array.from(isbns).join(";");
     values.bookShowId = USER_INFO.bookShowId;
     console.log(values);
     reqInterface.submitSelectBooks(values).then((res) => {

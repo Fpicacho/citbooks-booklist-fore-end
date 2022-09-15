@@ -103,8 +103,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, RouterLink } from "vue-router";
+
 import reqInterface from "../../api/reqInterface";
 import utility from "../../utility/index";
+import GlobalConfig from "../../config/index";
+
 import { useBookListStore } from "../../store/bookListStore";
 import { useUserInfoStore } from "../../store/userInfoStore";
 const { SetBookListItem } = useBookListStore();
@@ -167,7 +170,7 @@ function bookInfoDetail() {
 // 图书详情数据纯净化
 function bookDetailsPure(value) {
   return {
-    imgUrl: `http://www.ctibooks.com.cn/img/bookcover/${value.isbn}.jpg`,
+    imgUrl: `${GlobalConfig.imgServeUrl}${value.isbn}.jpg`,
     title: `${value.chineseTitle} ${value.title}`,
     author: `${value.author}`,
     press: `${value.publisherName} ${value.publishYear}`,

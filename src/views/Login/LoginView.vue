@@ -55,7 +55,8 @@ import utility from "../../utility/index";
 import { message } from "ant-design-vue";
 import { useUserInfoStore } from "../../store/userInfoStore";
 const { USER_INFO } = useUserInfoStore();
-const { SetBookShowId, SetBookShowName, SetId } = useUserInfoStore();
+const { SetBookShowId, SetBookShowName, SetId, SetBookCount } =
+  useUserInfoStore();
 const visible = ref(false);
 const formState = ref({
   account: "",
@@ -73,6 +74,7 @@ function onFinish(value) {
       SetBookShowName(res.data.user.bookShowName);
       SetBookShowId(res.data.user.bookShowId);
       SetId(res.data.user.id);
+      SetBookCount(res.data.user.bookCount);
       message.success(`登录成功！欢迎${USER_INFO.bookShowName}`);
       utility.goTo("home");
     } else {
