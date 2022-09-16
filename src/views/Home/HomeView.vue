@@ -20,6 +20,7 @@
           <a-input
             v-model:value="state.searchBoxData.value"
             placeholder="请输入检索内容"
+            @keydown.enter="onSearch"
           />
           <a-button type="primary" @click="onSearch">搜索</a-button>
         </a-input-group>
@@ -191,7 +192,26 @@ function onSearch() {
     message.error("输入内容为空，请检查！");
     return;
   }
-  console.log(state.searchBoxData);
+  reqInterface
+    .bookSearch({
+      bookShowId: USER_INFO.bookShowId,
+      pages: 1,
+      length: state.pager.pageSize,
+      type: state.searchBoxData.type,
+      value: state.searchBoxData.value,
+    })
+    .then((res) => {
+      state.pager.current = 1;
+      state.pager.total = res.data.length;
+      state.bookListData = [];
+      try {
+        res.data.paDatas.forEach((item) => {
+          state.bookListData.push(bookItemPure(item));
+        });
+      } catch (error) {
+        console.log("数据为空");
+      }
+    });
 }
 
 // 跳转详情逻辑
@@ -212,6 +232,13 @@ function clickPagination(index, page) {
   document.scrollingElement.scrollTop = 0;
 }
 
+// 获取二级树数据
+function categoryTreeNode(params) {
+  reqInterface.categoryTreeNode(params).then((res) => {
+    state.treeData = res.data.data;
+  });
+}
+
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
   // const reg = /-/g;
@@ -225,12 +252,6 @@ function clickTreeNode(node) {
   });
 }
 
-// 获取二级树数据
-function categoryTreeNode(params) {
-  reqInterface.categoryTreeNode(params).then((res) => {
-    state.treeData = res.data.data;
-  });
-}
 // 获取图书列表数据
 function bookCategorySearch(params) {
   reqInterface.bookCategorySearch(params).then((res) => {

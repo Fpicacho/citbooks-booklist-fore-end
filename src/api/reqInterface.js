@@ -26,4 +26,8 @@ export default {
   bookInfoDetail(params) {
     return fetch.get("/ctiweb/onlinebookshow/bookInfoDetail.action", params);
   },
+  // 检索
+  bookSearch(params) {
+    return fetch.get("/ctiweb/onlinebookshow/bookSearch.action", params);
+  },
 };
