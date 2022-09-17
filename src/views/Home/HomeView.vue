@@ -4,7 +4,7 @@
     <div class="container">
       <!-- logo -->
       <div class="logoBox">
-        <img src="../../assets/img/logo.png" alt="" />
+        <img src="../../assets/img/logo.webp" alt="" />
         <span>创新、诚信、服务、求实</span>
       </div>
       <!-- 搜索框 -->
@@ -94,7 +94,7 @@
           </BookItem>
           <a-empty
             v-else
-            description="找不到相关内容，换一种检索方式或者向我们提交建议。"
+            description="找不到相关内容，换一种检索方式或尝试刷新页面重新拉取内容。"
             style="padding: 25px"
           />
         </div>

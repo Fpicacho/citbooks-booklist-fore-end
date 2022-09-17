@@ -5,7 +5,7 @@
     <div class="loginPanel">
       <img
         class="panelLogo"
-        src="../../assets/img/logo.png"
+        src="../../assets/img/logo.webp"
         alt="logo图像资源加载失败"
       />
       <p class="decorativeTtext">Single Sign In</p>
@@ -41,8 +41,16 @@
     <!-- 注册提示框 -->
     <a-modal v-model:visible="visible" title="注册指南" @ok="showModal">
       <p>
-        中国科技资料进出口总公司线上书展系统采用邀请注册制，我们愿与各大高校/企业组织建立合作关系xxx，如您的组织/高效有图书购买需求请联系我们
-        电话：188888888888888
+        中国科技资料进出口总公司线上书展系统采用邀请注册制，我们愿与各大高校/企业组织建立合作关系。
+        <br />
+        如果注册中有任何问题，请与市场部联系。
+      </p>
+      <p>
+        中国科技资料进出口总公司市场部电话：
+        <a href="tel:025-83314729-853">025-83314729-853</a>
+        <br />
+        中国科技资料进出口总公司市场部邮箱：
+        <a href="mailto:marketing@ctibook.com">marketing@ctibook.com</a>
       </p>
     </a-modal>
   </div>
@@ -55,7 +63,7 @@ import utility from "../../utility/index";
 import { message } from "ant-design-vue";
 import { useUserInfoStore } from "../../store/userInfoStore";
 const { USER_INFO } = useUserInfoStore();
-const { SetBookShowId, SetBookShowName, SetId, SetBookCount,SetBannerList } =
+const { SetBookShowId, SetBookShowName, SetId, SetBookCount, SetBannerList } =
   useUserInfoStore();
 const visible = ref(false);
 const formState = ref({
@@ -75,7 +83,7 @@ function onFinish(value) {
       SetBookShowId(res.data.user.bookShowId);
       SetId(res.data.user.id);
       SetBookCount(res.data.user.bookCount);
-      SetBannerList(res.data.user.imgUrls)
+      SetBannerList(res.data.user.imgUrls);
       message.success(`登录成功！欢迎${USER_INFO.bookShowName}`);
       utility.goTo("home");
     } else {
@@ -92,7 +100,7 @@ function onFinish(value) {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url("../../assets/img/loginBackground.jpg");
+  background-image: url("../../assets/img/loginBackground.webp");
   background-position: center;
   background-size: auto 100%;
   .loginPanel {
@@ -102,6 +110,7 @@ function onFinish(value) {
     padding: 25px 20px;
     .panelLogo {
       width: 100%;
+      height: auto;
       margin-bottom: 25px;
     }
     .decorativeTtext {
