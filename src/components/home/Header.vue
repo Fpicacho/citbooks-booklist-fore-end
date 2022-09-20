@@ -2,7 +2,7 @@
   <div class="header">
     <div class="l">
       <a-tag color="#f50">{{ USER_INFO.bookShowName }}</a-tag>
-      <a-tag color="#2db7f5">共{{USER_INFO.bookCount}}本书</a-tag>
+      <a-tag color="#2db7f5">共{{ USER_INFO.bookCount }}本书</a-tag>
       <a-tag
         color="#87d068"
         style="cursor: pointer"
@@ -15,6 +15,9 @@
         <a-button type="text" @click="handleMenuClick({ key: '1' })"
           >我的书单</a-button
         >
+        <a-button type="text" @click="handleMenuClick({ key: '3' })"
+          >选书记录</a-button
+        >
         <a-button type="text" @click="handleMenuClick({ key: '2' })"
           >登出</a-button
         >
@@ -24,6 +27,7 @@
           <template #overlay>
             <a-menu @click="handleMenuClick">
               <a-menu-item key="1"> 我的书单 </a-menu-item>
+              <a-menu-item key="3"> 选书记录 </a-menu-item>
               <a-menu-item key="2"> 登出 </a-menu-item>
             </a-menu>
           </template>
@@ -67,6 +71,9 @@ function handleMenuClick(flag) {
     case "2":
       visible.value = true;
       break;
+    case "3":
+      utility.goTo("home-record");
+      break;
   }
 }
 function hideModal(flag) {
@@ -75,7 +82,7 @@ function hideModal(flag) {
       visible.value = false;
       break;
     case "logOut":
-      localStorage.clear(); 
+      localStorage.clear();
       location.reload();
       break;
   }

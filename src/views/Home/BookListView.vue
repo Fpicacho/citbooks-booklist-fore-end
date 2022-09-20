@@ -91,9 +91,9 @@
             label="电话"
             name="telNum"
             :rules="[
-              { required: true, message: '请输入电话号码', trigger: 'blur' },
+              { required: true, message: '请输入号码', trigger: 'blur' },
               {
-                pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+                pattern: /^1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/,
                 message: '请输入正确的手机号码',
                 trigger: 'blur',
               },
@@ -102,7 +102,7 @@
             <a-input
               v-model:value="state.formState.telNum"
               :maxlength="11"
-              placeholder="请输入移动电话号码"
+              placeholder="请输入移动/固定电话号码"
             />
           </a-form-item>
           <a-form-item

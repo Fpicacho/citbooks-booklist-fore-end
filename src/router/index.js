@@ -31,7 +31,16 @@ const routes = [
         // 图书详情
         path: "/home/details",
         name: "home-details",
-        component: () => import("../views/Home/Details.vue"),
+        component: () => import("../views/Home/DetailsView.vue"),
+        meta: {
+          keepAlive: false,
+        },
+      },
+      {
+        // 选书记录
+        path: "/home/record",
+        name: "home-record",
+        component: () => import("../views/Home/RecordView.vue"),
         meta: {
           keepAlive: false,
         },
@@ -43,7 +52,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: {
-      noAuth: true,
+      keepAlive: false,
     },
     component: () => import("../views/Login/LoginView.vue"),
   },
@@ -52,7 +61,7 @@ const routes = [
     path: "/404",
     name: "404",
     meta: {
-      noAuth: true,
+      keepAlive: false,
     },
     component: () => import("../views/404"),
   },
@@ -60,7 +69,7 @@ const routes = [
     path: "/:pathMatch(.*)",
     redirect: "/404",
     meta: {
-      noAuth: true,
+      keepAlive: false,
     },
   },
 ];

@@ -1,5 +1,5 @@
 <template>
-  <!-- 详情页面 src\views\Home\Details.vue-->
+  <!-- 详情页面 src\views\Home\DetailsView.vue-->
   <div class="details">
     <div class="container">
       <!-- 面包导航 -->
