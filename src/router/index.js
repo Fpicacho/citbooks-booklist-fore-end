@@ -58,7 +58,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: {
-      keepAlive: false,
+      noAuth: true,
     },
     component: () => import("../views/Login/LoginView.vue"),
   },
@@ -67,7 +67,7 @@ const routes = [
     path: "/404",
     name: "404",
     meta: {
-      keepAlive: false,
+      noAuth: true,
     },
     component: () => import("../views/404"),
   },
@@ -75,7 +75,7 @@ const routes = [
     path: "/:pathMatch(.*)",
     redirect: "/404",
     meta: {
-      keepAlive: false,
+      noAuth: true,
     },
   },
 ];
