@@ -30,4 +30,12 @@ export default {
   bookSearch(params) {
     return fetch.get("/ctiweb/onlinebookshow/bookSearch.action", params);
   },
+  // 获取当前书展老师选书记录
+  selectBookRecord(params) {
+    return fetch.get("/ctiweb/onlinebookshow/selectBookRecord.action", params);
+  },
+  // 描述根据选书记录id获取选书明细
+  selectBookRecordItem(params) {
+    return fetch.get("/ctiweb/onlinebookshow/selectBookRecordItem.action", params);
+  },
 };

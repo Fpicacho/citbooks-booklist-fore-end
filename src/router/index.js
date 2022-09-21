@@ -45,6 +45,12 @@ const routes = [
           keepAlive: false,
         },
       },
+      {
+        // 选书记录详情
+        path: "/home/record/:id",
+        name: "home-record-RecordItem",
+        component: () => import("../views/Home/RecordRecordItem.vue"),
+      },
     ],
   },
   {

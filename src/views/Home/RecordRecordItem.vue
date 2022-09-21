@@ -1,6 +1,5 @@
 <template>
-  <!-- 我的书单 src\views\Home\BookListView.vue-->
-  <div class="bookListView">
+  <div class="recordRecordItem">
     <div class="container">
       <!-- 提示信息 -->
       <a-alert
@@ -24,7 +23,7 @@
       <div class="tableBox">
         <a-table
           :columns="columns"
-          :dataSource="BOOK_LIST"
+          :dataSource="bookListData"
           :scroll="{ x: 1024 }"
           bordered
         >
@@ -43,171 +42,37 @@
                 @click="utility.goTo('home-details', { isbn: record.isbn })"
                 >详情</a-button
               >
-              <a-button
-                type="link"
-                @click="DeleteBookListItem(index, record)"
-                danger
-                >删除</a-button
-              >
             </template>
           </template>
           <template #footer>
-            <a-button type="primary" @click="utility.outputExcel(BOOK_LIST)"
+            <a-button type="primary" @click="utility.outputExcel(bookListData)"
               >导出书单至本地（Excel表格）</a-button
-            >
-            <a-button type="primary" @click="visible = !visible"
-              >上传我的选书清单 ({{ BOOK_LIST.length }})本</a-button
             >
           </template>
         </a-table>
       </div>
-      <!-- 提交书单抽屉 -->
-      <a-drawer
-        v-model:visible="visible"
-        class="custom-class"
-        title="上传书单"
-        placement="left"
-        width="320"
-      >
-        <!-- 提交书单表单 -->
-        <a-form
-          :model="state.formState"
-          name="basic"
-          autocomplete="off"
-          @finish="onFinish"
-        >
-          <a-form-item
-            label="姓名"
-            name="teachName"
-            :rules="[{ required: true, message: '请输入姓名' }]"
-          >
-            <a-input
-              v-model:value="state.formState.teachName"
-              :maxlength="10"
-              placeholder="请输入姓名"
-            />
-          </a-form-item>
-          <a-form-item
-            label="电话"
-            name="telNum"
-            :rules="[
-              { required: true, message: '请输入号码', trigger: 'blur' },
-              {
-                pattern: /^1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/,
-                message: '请输入正确的手机号码',
-                trigger: 'blur',
-              },
-            ]"
-          >
-            <a-input
-              v-model:value="state.formState.telNum"
-              :maxlength="11"
-              placeholder="请输入移动/固定电话号码"
-            />
-          </a-form-item>
-          <a-form-item
-            label="邮箱"
-            name="email"
-            :rules="[
-              { required: true, message: '请输入邮箱' },
-              {
-                pattern: /^\w{1,64}@[a-z0-9\-]{1,256}(\.[a-z]{2,6}){1,2}$/,
-                message: '邮箱格式有误，请检查！',
-                trigger: 'blur',
-              },
-            ]"
-          >
-            <a-input
-              v-model:value="state.formState.email"
-              :maxlength="50"
-              placeholder="请输入邮箱"
-            />
-          </a-form-item>
-          <a-form-item
-            label="院系"
-            name="depart"
-            :rules="[{ required: true, message: '请输入院系' }]"
-          >
-            <a-input
-              v-model:value="state.formState.depart"
-              :maxlength="50"
-              placeholder="请输入院系"
-            />
-          </a-form-item>
-          <a-form-item
-            label="职业类型"
-            name="type"
-            :rules="[{ required: true, message: '请选择类型' }]"
-          >
-            <a-select v-model:value="state.formState.type" :options="types" />
-          </a-form-item>
-          <a-form-item
-            label="学号"
-            name="cardNum"
-            :rules="[{ required: true, message: '请输入学号' }]"
-          >
-            <a-input
-              v-model:value="state.formState.cardNum"
-              :maxlength="50"
-              placeholder="请输入学号"
-            />
-          </a-form-item>
-          <a-form-item
-            label="推荐理由"
-            name="mark"
-            :rules="[
-              {
-                required: true,
-                message: '请输入推荐理由',
-              },
-            ]"
-          >
-            <a-textarea
-              v-model:value="state.formState.mark"
-              :maxlength="5000"
-              show-count
-              allow-clear
-              placeholder="推荐/采购理由"
-            />
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              type="primary"
-              html-type="submit"
-              :loading="LOADING_STATE"
-              style="width: 100%"
-              >提交书单</a-button
-            >
-          </a-form-item>
-        </a-form>
-      </a-drawer>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
-import { RouterLink } from "vue-router";
-import utility from "../../utility/index";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import reqInterface from "../../api/reqInterface";
-import { message } from "ant-design-vue";
-import { storeToRefs } from "pinia";
-import { useBookListStore } from "../../store/bookListStore";
-import { useLoadingStateStore } from "../../store/loadingStateStore";
-import { useUserInfoStore } from "../../store/userInfoStore";
-const { BOOK_LIST } = storeToRefs(useBookListStore());
-const { DeleteBookListItem } = useBookListStore();
-const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
-const { SetloadingState } = useLoadingStateStore();
-const { USER_INFO } = useUserInfoStore();
+import utility from "../../utility/index";
+const $route = useRoute();
 const routes = [
   {
     name: "home",
     breadcrumbName: "书展首页",
   },
   {
-    name: "home-bookList",
-    breadcrumbName: "我的书单",
+    name: "home-record",
+    breadcrumbName: "选书记录",
+  },
+  {
+    name: "home-record-RecordItem",
+    breadcrumbName: "详情",
   },
 ];
 const columns = [
@@ -280,48 +145,30 @@ const columns = [
     fixed: "right",
   },
 ];
-const types = [
-  { label: "教师", value: "教师" },
-  { label: "学生", value: "学生" },
-  { label: "管理", value: "管理" },
-  { label: "研究", value: "研究" },
-  { label: "其他", value: "其他" },
-];
-const state = reactive({
-  formState: {
-    teachName: "",
-    telNum: "",
-    email: "",
-    depart: "",
-    type: "",
-    cardNum: "",
-    mark: "",
-  },
+
+const bookListData = ref([]);
+
+onMounted(() => {
+  selectBookRecordItem();
 });
-let visible = ref(false);
-// 提交表单逻辑
-function onFinish(values) {
-  if (BOOK_LIST.value.length > 0) {
-    SetloadingState(true);
-    const isbns = new Set();
-    BOOK_LIST.value.forEach((item) => {
-      isbns.add(item.isbn);
+
+// 获取明细列表
+function selectBookRecordItem() {
+  reqInterface
+    .selectBookRecordItem({
+      recordId: $route.params.id,
+    })
+    .then((res) => {
+      console.log(res.data.datas);
+      res.data.datas.forEach((item) => {
+        bookListData.value.push(utility.bookItemPure(item));
+      });
     });
-    values.userId = USER_INFO.id;
-    values.isbns = Array.from(isbns).join(";");
-    values.bookShowId = USER_INFO.bookShowId;
-    reqInterface.submitSelectBooks(values).then((res) => {
-      message.success("书单已经成功提交至云端！");
-      visible.value = false;
-    });
-  } else {
-    message.error("书单为空，无法上传书单！");
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-.bookListView {
+.recordRecordItem {
   background: #f6f6f6;
   min-height: 88vh;
   .container {
@@ -362,7 +209,7 @@ function onFinish(values) {
 }
 </style>
 <style lang="scss">
-.bookListView {
+.recordRecordItem {
   .ant-table-footer {
     display: flex;
     justify-content: end;
