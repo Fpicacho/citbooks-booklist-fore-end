@@ -15,7 +15,10 @@
         <a-button type="text" @click="handleMenuClick({ key: '1' })"
           >我的书单</a-button
         >
-        <a-button type="text" @click="handleMenuClick({ key: '3' })"
+        <a-button
+          type="text"
+          @click="handleMenuClick({ key: '3' })"
+          v-if="USER_INFO.superUser === 1"
           >选书记录</a-button
         >
         <a-button type="text" @click="handleMenuClick({ key: '2' })"

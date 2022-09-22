@@ -209,7 +209,7 @@ function onSearch() {
           state.bookListData.push(bookItemPure(item));
         });
       } catch (error) {
-        console.log("数据为空");
+        message.error("搜索结果为空！");
       }
     });
 }
@@ -223,12 +223,35 @@ function openDetailsView(target) {
 function clickPagination(index, page) {
   state.pager.current = index;
   state.pager.pageSize = page;
-  bookCategorySearch({
-    bookShowId: USER_INFO.bookShowId,
-    category: categoryList,
-    pages: state.pager.current,
-    length: state.pager.pageSize,
-  });
+  if (state.searchBoxData.value === "") {
+    bookCategorySearch({
+      bookShowId: USER_INFO.bookShowId,
+      category: categoryList,
+      pages: state.pager.current,
+      length: state.pager.pageSize,
+    });
+  } else {
+    reqInterface
+      .bookSearch({
+        bookShowId: USER_INFO.bookShowId,
+        pages: state.pager.current,
+        length: state.pager.pageSize,
+        type: state.searchBoxData.type,
+        value: state.searchBoxData.value,
+      })
+      .then((res) => {
+        state.pager.total = res.data.length;
+        state.bookListData = [];
+        try {
+          res.data.paDatas.forEach((item) => {
+            state.bookListData.push(bookItemPure(item));
+          });
+        } catch (error) {
+          console.log("数据为空");
+        }
+      });
+  }
+  console.log(state.pager.current, state.pager.pageSize);
   document.scrollingElement.scrollTop = 0;
 }
 
@@ -242,6 +265,7 @@ function categoryTreeNode(params) {
 // 点击二级树节点逻辑
 function clickTreeNode(node) {
   // const reg = /-/g;
+  state.searchBoxData.value = "";
   categoryList = node.join(";");
   state.pager.current = 1;
   bookCategorySearch({
