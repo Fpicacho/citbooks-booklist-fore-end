@@ -18,7 +18,7 @@
         <a-button
           type="text"
           @click="handleMenuClick({ key: '3' })"
-          v-if="USER_INFO.superUser === 1"
+          v-if="USER_INFO.citUser"
           >选书记录</a-button
         >
         <a-button type="text" @click="handleMenuClick({ key: '2' })"

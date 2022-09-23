@@ -9,7 +9,7 @@ export const useUserInfoStore = defineStore("userInfoStore", {
         id: "",
         bookCount: "",
         bannerList: [],
-        superUser: 1,
+        citUser: null,
       },
     };
   },
@@ -30,8 +30,8 @@ export const useUserInfoStore = defineStore("userInfoStore", {
       const list = value.split(";");
       this.USER_INFO.bannerList = list;
     },
-    SetSuperUser(value) {
-      this.USER_INFO.superUser = value;
+    SetCitUser(value) {
+      this.USER_INFO.citUser = value;
     },
   },
 
