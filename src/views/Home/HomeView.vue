@@ -32,19 +32,22 @@
             :placeholder="$t('SearchBoxForm.searchTips')"
             @keydown.enter="onSearch"
           />
-          <a-button type="primary" @click="onSearch">{{$t('SearchBoxForm.search')}}</a-button>
+          <a-button type="primary" @click="onSearch">{{
+            $t("SearchBoxForm.search")
+          }}</a-button>
         </a-input-group>
         <span
           id="peCategorySearch"
           class="categorySearch"
           @click="visible = !visible"
-          >{{$t('SearchBoxForm.coRetrieval')}}
+          >{{ $t("SearchBoxForm.coRetrieval") }}
           <span style="color: #e94235">{{ state.pager.total }}</span>
-          {{$t('SearchBoxForm.coRetrieval2')}}</span
+          {{ $t("SearchBoxForm.coRetrieval2") }}</span
         >
         <span id="pcCategorySearch" class="categorySearch"
-          >{{$t('SearchBoxForm.coRetrieval3')}}
-          <span style="color: #e94235">{{ state.pager.total }}</span> {{$t('SearchBoxForm.coRetrieval4')}}</span
+          >{{ $t("SearchBoxForm.coRetrieval3") }}
+          <span style="color: #e94235">{{ state.pager.total }}</span>
+          {{ $t("SearchBoxForm.coRetrieval4") }}</span
         >
       </div>
       <main>
@@ -73,7 +76,7 @@
                 background: #fff;
               "
             >
-              <p>{{$t('TreeBoxTip')}}</p>
+              <p>{{ $t("TreeBoxTip") }}</p>
               <a-tree
                 v-if="state.treeData.length"
                 :tree-data="state.treeData"
@@ -97,9 +100,9 @@
           >
             <div style="margin-top: 10px">
               <!-- 插槽行为 src\views\Home\HomeView.vue-->
-              <a-button type="primary" @click.stop="SetBookListItem(item)"
-                >{{$t('BookItem.add')}}</a-button
-              >
+              <a-button type="primary" @click.stop="SetBookListItem(item)">{{
+                $t("BookItem.add")
+              }}</a-button>
             </div>
           </BookItem>
           <a-empty
@@ -148,10 +151,13 @@ import utility from "../../utility/index";
 import GlobalConfig from "../../config/index";
 import reqInterface from "../../api/reqInterface";
 
+import { useI18n } from "vue-i18n";
+
 import { useBookListStore } from "../../store/bookListStore";
 import { useUserInfoStore } from "../../store/userInfoStore";
 const { SetBookListItem } = useBookListStore();
 const { USER_INFO } = useUserInfoStore();
+const { t } = useI18n();
 
 let categoryList = new Set();
 const fieldNames = {
@@ -200,7 +206,7 @@ onMounted(() => {
 // 搜索逻辑
 function onSearch() {
   if (state.searchBoxData.value === "") {
-    message.error("输入内容为空，请检查！");
+    message.error(t("PromptInfo.emptyContent"));
     return;
   }
   reqInterface

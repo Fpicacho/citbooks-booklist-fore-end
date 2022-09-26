@@ -3,6 +3,8 @@ import { message } from "ant-design-vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { createVNode } from "vue";
 import { Modal } from "ant-design-vue";
+import i18n from "@/i18n";
+const { t } = i18n.global;
 // 全局书单容器
 export const useBookListStore = defineStore("bookListStore", {
   state: () => {
@@ -20,32 +22,42 @@ export const useBookListStore = defineStore("bookListStore", {
       });
       if (flag) {
         Modal.confirm({
-          title: "是否继续追加？",
+          title: t("BooklistInfo.AppendTitle"),
           icon: createVNode(ExclamationCircleOutlined),
-          okText: "确认",
-          cancelText: "取消",
+          okText: t("BooklistInfo.okText"),
+          cancelText: t("BooklistInfo.cancelText"),
           content: createVNode(
             "div",
             { style: "color:red;" },
-            `检测到书单中存在一本或多本《${targget.title}》是否继续追加？`
+            `${t("BooklistInfo.AppendInfo")}${targget.title}${t(
+              "BooklistInfo.AppendInfo2"
+            )}`
           ),
           onOk: () => {
             this.BOOK_LIST.push(targget);
-            message.success(`已将《${targget.title}》加入至我的书单。`);
+            message.success(
+              `${t("BooklistInfo.AppendInfo3")}${targget.title}${t(
+                "BooklistInfo.AppendInfo4"
+              )}`
+            );
           },
           onCancel: () => {
-            message.error(`放弃追加《${targget.title}》`);
+            message.error(
+              `${t("BooklistInfo.AppendInfo5")}${targget.title}${t(
+                "BooklistInfo.AppendInfo6"
+              )}`
+            );
           },
         });
       } else {
         this.BOOK_LIST.push(targget);
-        message.success(`已将《${targget.title}》加入至我的书单。`);
+        message.success(`${t('BooklistInfo.AppendInfo3')}${targget.title}${t('BooklistInfo.AppendInfo4')}`);
       }
     },
     // 移除书单逻辑
-    DeleteBookListItem(index,targget) {
+    DeleteBookListItem(index, targget) {
       this.BOOK_LIST.splice(index, 1);
-      message.success(`已将《${targget.title}》移除我的书单。`);
+      message.success(`${t('BooklistInfo.AppendInfo3')}${targget.title}${t('BooklistInfo.AppendInfo7')}`);
     },
   },
   // 开启本地化存储选项

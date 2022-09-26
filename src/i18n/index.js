@@ -10,3 +10,9 @@ const i18n = createI18n({
   },
 });
 export default i18n;
+
+// import { useI18n } from "vue-i18n";
+// const { t } = useI18n();
+
+// import i18n from "@/i18n";
+// const { t } = i18n.global;

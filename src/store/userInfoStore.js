@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-// 全局加载状态容器
+// 全局用户信息容器
 export const useUserInfoStore = defineStore("userInfoStore", {
   state: () => {
     return {
