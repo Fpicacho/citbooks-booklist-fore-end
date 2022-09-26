@@ -5,6 +5,7 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import Antd from "ant-design-vue";
 import { message } from "ant-design-vue";
+import VueI18n from "./i18n";
 import "ant-design-vue/dist/antd.css";
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
@@ -26,4 +27,4 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-createApp(App).use(router).use(pinia).use(Antd).mount("#app");
+createApp(App).use(router).use(VueI18n).use(pinia).use(Antd).mount("#app");

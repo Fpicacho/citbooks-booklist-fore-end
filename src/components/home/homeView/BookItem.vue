@@ -21,14 +21,14 @@
         <p class="author">{{ data.author }}</p>
       </div>
       <div class="infoList">
-        <span><span class="title">ISBN：</span>{{ data.isbn }}</span>
+        <span><span class="title">{{$t('BookItem.ISBN')}}：</span>{{ data.isbn }}</span>
         <!-- <span><span class="title">中图分类号：</span>{{ data.clcNo }}</span> -->
-        <span><span class="title">装帧：</span>{{ data.binding }}</span>
-        <span><span class="title">页数：</span>{{ data.pages }}</span>
+        <span><span class="title">{{$t('BookItem.Binding')}}：</span>{{ data.binding }}</span>
+        <span><span class="title">{{$t('BookItem.pages')}}：</span>{{ data.pages }}</span>
         <!-- <span><span class="title">币制：</span>{{ data.monetary }}</span> -->
-        <span><span class="title">价格：</span>{{ data.monetary }} {{ data.price }}</span>
+        <span><span class="title">{{$t('BookItem.Price')}}：</span>{{ data.monetary }} {{ data.price }}</span>
         <span
-          ><span class="title">供货信息：</span>
+          ><span class="title">{{$t('BookItem.SupplyStatus')}}：</span>
           <span style="color: #34a853; margin-left: 0">{{
             data.supplyInfo
           }}</span>

@@ -78,6 +78,7 @@ function outputExcel(value) {
   }
   message.error("书单为空，无法导出Excel");
 }
+
 export default {
   goTo,
   bookItemPure,

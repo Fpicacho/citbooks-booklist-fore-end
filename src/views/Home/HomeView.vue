@@ -5,36 +5,46 @@
       <!-- logo -->
       <div class="logoBox">
         <img src="../../assets/img/logo.webp" alt="" />
-        <span>创新、诚信、服务、求实</span>
+        <span>{{ $t("slogan") }}</span>
       </div>
       <!-- 搜索框 -->
       <div class="searchBox">
         <a-input-group compact id="SearchBoxForm">
           <a-select v-model:value="state.searchBoxData.type">
-            <a-select-option value="keyword">关键字</a-select-option>
-            <a-select-option value="isbn">ISBN</a-select-option>
-            <a-select-option value="pubyear">出版年</a-select-option>
-            <a-select-option value="pub">出版社</a-select-option>
-            <a-select-option value="title">题名</a-select-option>
+            <a-select-option value="keyword">{{
+              $t("SearchBoxForm.keyword")
+            }}</a-select-option>
+            <a-select-option value="isbn">{{
+              $t("SearchBoxForm.isbn")
+            }}</a-select-option>
+            <a-select-option value="pubyear">{{
+              $t("SearchBoxForm.pubyear")
+            }}</a-select-option>
+            <a-select-option value="pub">{{
+              $t("SearchBoxForm.pub")
+            }}</a-select-option>
+            <a-select-option value="title">{{
+              $t("SearchBoxForm.title")
+            }}</a-select-option>
           </a-select>
           <a-input
             v-model:value="state.searchBoxData.value"
-            placeholder="请输入检索内容"
+            :placeholder="$t('SearchBoxForm.searchTips')"
             @keydown.enter="onSearch"
           />
-          <a-button type="primary" @click="onSearch">搜索</a-button>
+          <a-button type="primary" @click="onSearch">{{$t('SearchBoxForm.search')}}</a-button>
         </a-input-group>
         <span
           id="peCategorySearch"
           class="categorySearch"
           @click="visible = !visible"
-          >点击按分类搜索 (共检索到
+          >{{$t('SearchBoxForm.coRetrieval')}}
           <span style="color: #e94235">{{ state.pager.total }}</span>
-          本书)</span
+          {{$t('SearchBoxForm.coRetrieval2')}}</span
         >
         <span id="pcCategorySearch" class="categorySearch"
-          >共检索到
-          <span style="color: #e94235">{{ state.pager.total }}</span> 本书</span
+          >{{$t('SearchBoxForm.coRetrieval3')}}
+          <span style="color: #e94235">{{ state.pager.total }}</span> {{$t('SearchBoxForm.coRetrieval4')}}</span
         >
       </div>
       <main>
@@ -63,7 +73,7 @@
                 background: #fff;
               "
             >
-              <p>按分类搜索：</p>
+              <p>{{$t('TreeBoxTip')}}</p>
               <a-tree
                 v-if="state.treeData.length"
                 :tree-data="state.treeData"
@@ -88,7 +98,7 @@
             <div style="margin-top: 10px">
               <!-- 插槽行为 src\views\Home\HomeView.vue-->
               <a-button type="primary" @click.stop="SetBookListItem(item)"
-                >加入书单</a-button
+                >{{$t('BookItem.add')}}</a-button
               >
             </div>
           </BookItem>
@@ -110,7 +120,7 @@
       <!-- 分类抽屉 -->
       <a-drawer
         :width="310"
-        title="分类搜索"
+        :title="$t('TreeBoxTip')"
         placement="left"
         :visible="visible"
         @close="visible = !visible"

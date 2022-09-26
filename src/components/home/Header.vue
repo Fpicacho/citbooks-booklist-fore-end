@@ -1,37 +1,47 @@
 <template>
+  <!-- 全局组件 页头 src\components\home\Header.vue -->
   <div class="header">
     <div class="l">
       <a-tag color="#f50">{{ USER_INFO.bookShowName }}</a-tag>
-      <a-tag color="#2db7f5">共{{ USER_INFO.bookCount }}本书</a-tag>
+      <a-tag color="#2db7f5"
+        >{{ $t("Header.bookcount") }}{{ USER_INFO.bookCount
+        }}{{ $t("Header.bookcount2") }}</a-tag
+      >
       <a-tag
         color="#87d068"
         style="cursor: pointer"
         @click="utility.goTo('home')"
-        >书展首页</a-tag
+        >{{ $t("Header.homePage") }}</a-tag
       >
     </div>
     <div class="r">
       <div class="pc">
         <a-button type="text" @click="handleMenuClick({ key: '1' })"
-          >我的书单</a-button
+          >{{$t("Header.bookList")}}</a-button
         >
         <a-button
           type="text"
           @click="handleMenuClick({ key: '3' })"
           v-if="USER_INFO.citUser"
-          >选书记录</a-button
+          >{{$t("Header.record")}}</a-button
         >
         <a-button type="text" @click="handleMenuClick({ key: '2' })"
-          >登出</a-button
+          >{{$t("Header.logOut")}}</a-button
         >
+        <a-button type="text" @click="handleMenuClick({ key: '4' })">{{
+          I18n_STATE
+        }}</a-button>
       </div>
       <div class="pe">
         <a-dropdown>
           <template #overlay>
             <a-menu @click="handleMenuClick">
-              <a-menu-item key="1"> 我的书单 </a-menu-item>
-              <a-menu-item key="3" v-if="USER_INFO.citUser"> 选书记录 </a-menu-item>
-              <a-menu-item key="2"> 登出 </a-menu-item>
+              <a-menu-item key="1"> {{$t("Header.bookList")}} </a-menu-item>
+              <a-menu-item key="3" v-if="USER_INFO.citUser">
+                {{$t("Header.record")}}
+              </a-menu-item>
+              <a-menu-item key="2"> {{$t("Header.logOut")}} </a-menu-item>
+              <a-menu-item key="4"> {{ I18n_STATE }} </a-menu-item>
             </a-menu>
           </template>
           <a-button>
@@ -59,11 +69,14 @@
 
 <script setup>
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { MenuOutlined } from "@ant-design/icons-vue";
 import utility from "../../utility/index";
 import { useUserInfoStore } from "../../store/userInfoStore";
+import { useI18nStateStore } from "../../store/i18nStore";
 const { USER_INFO } = useUserInfoStore();
-
+const { I18n_STATE } = storeToRefs(useI18nStateStore());
+const { SetBookShowName } = useI18nStateStore();
 const visible = ref(false);
 
 function handleMenuClick(flag) {
@@ -76,6 +89,9 @@ function handleMenuClick(flag) {
       break;
     case "3":
       utility.goTo("home-record");
+      break;
+    case "4":
+      SetBookShowName();
       break;
   }
 }
