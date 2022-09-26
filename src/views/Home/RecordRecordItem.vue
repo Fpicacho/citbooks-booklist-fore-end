@@ -159,7 +159,6 @@ function selectBookRecordItem() {
       recordId: $route.params.id,
     })
     .then((res) => {
-      console.log(res.data.datas);
       res.data.datas.forEach((item) => {
         bookListData.value.push(utility.bookItemPure(item));
       });

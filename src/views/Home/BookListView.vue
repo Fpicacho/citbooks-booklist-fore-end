@@ -4,7 +4,7 @@
     <div class="container">
       <!-- 提示信息 -->
       <a-alert
-        message="尊敬的用户您好，在使用移动设备时建议将屏幕横置，以获得更好的阅览体验！"
+        :message="$t('PromptInfo.message')"
         type="warning"
         closable
         style="margin-bottom: 20px"
@@ -41,22 +41,22 @@
               <a-button
                 type="link"
                 @click="utility.goTo('home-details', { isbn: record.isbn })"
-                >详情</a-button
+                >{{ $t("bookList.Details") }}</a-button
               >
               <a-button
                 type="link"
                 @click="DeleteBookListItem(index, record)"
                 danger
-                >删除</a-button
+                >{{ $t("bookList.Delete") }}</a-button
               >
             </template>
           </template>
           <template #footer>
-            <a-button type="primary" @click="utility.outputExcel(BOOK_LIST)"
-              >导出书单至本地（Excel表格）</a-button
-            >
+            <a-button type="primary" @click="utility.outputExcel(BOOK_LIST)">{{
+              $t("bookList.Excel")
+            }}</a-button>
             <a-button type="primary" @click="visible = !visible"
-              >上传我的选书清单 ({{ BOOK_LIST.length }})本</a-button
+              >{{ $t("bookList.Upload") }} ({{ BOOK_LIST.length }})</a-button
             >
           </template>
         </a-table>
@@ -65,7 +65,7 @@
       <a-drawer
         v-model:visible="visible"
         class="custom-class"
-        title="上传书单"
+        :title="$t('bookList.Upload2')"
         placement="left"
         width="320"
       >
@@ -77,24 +77,29 @@
           @finish="onFinish"
         >
           <a-form-item
-            label="姓名"
+            :label="$t('bookList.Name')"
             name="teachName"
-            :rules="[{ required: true, message: '请输入姓名' }]"
+            :rules="[{ required: true, message: $t('bookList.Name2') }]"
           >
             <a-input
               v-model:value="state.formState.teachName"
               :maxlength="10"
-              placeholder="请输入姓名"
+              :placeholder="$t('bookList.Name2')"
             />
           </a-form-item>
           <a-form-item
-            label="电话"
+            :label="$t('bookList.Telephone')"
             name="telNum"
             :rules="[
-              { required: true, message: '请输入号码', trigger: 'blur' },
               {
-                pattern: /^1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/,
-                message: '请输入正确的手机号码',
+                required: true,
+                message: $t('bookList.Telephone2'),
+                trigger: 'blur',
+              },
+              {
+                pattern:
+                  /^1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/,
+                message: $t('bookList.Telephone3'),
                 trigger: 'blur',
               },
             ]"
@@ -102,17 +107,17 @@
             <a-input
               v-model:value="state.formState.telNum"
               :maxlength="11"
-              placeholder="请输入移动/固定电话号码"
+              :placeholder="$t('bookList.Telephone4')"
             />
           </a-form-item>
           <a-form-item
-            label="邮箱"
+            :label="$t('bookList.Mail')"
             name="email"
             :rules="[
-              { required: true, message: '请输入邮箱' },
+              { required: true, message: $t('bookList.Mail2') },
               {
                 pattern: /^\w{1,64}@[a-z0-9\-]{1,256}(\.[a-z]{2,6}){1,2}$/,
-                message: '邮箱格式有误，请检查！',
+                message: $t('bookList.Mail3'),
                 trigger: 'blur',
               },
             ]"
@@ -120,54 +125,54 @@
             <a-input
               v-model:value="state.formState.email"
               :maxlength="50"
-              placeholder="请输入邮箱"
+              :placeholder="$t('bookList.Mail2')"
             />
           </a-form-item>
           <a-form-item
-            label="院系"
+            :label="$t('bookList.Faculty')"
             name="depart"
-            :rules="[{ required: true, message: '请输入院系' }]"
+            :rules="[{ required: true, message: $t('bookList.Faculty2') }]"
           >
             <a-input
               v-model:value="state.formState.depart"
               :maxlength="50"
-              placeholder="请输入院系"
+              :placeholder="$t('bookList.Faculty2')"
             />
           </a-form-item>
           <a-form-item
-            label="职业类型"
+            :label="$t('bookList.Type')"
             name="type"
-            :rules="[{ required: true, message: '请选择类型' }]"
+            :rules="[{ required: true, message: $t('bookList.Type2') }]"
           >
             <a-select v-model:value="state.formState.type" :options="types" />
           </a-form-item>
           <a-form-item
-            label="学号"
+            :label="$t('bookList.Student')"
             name="cardNum"
-            :rules="[{ required: true, message: '请输入学号' }]"
+            :rules="[{ required: true, message: $t('bookList.Student2') }]"
           >
             <a-input
               v-model:value="state.formState.cardNum"
               :maxlength="50"
-              placeholder="请输入学号"
+              :placeholder="$t('bookList.Student2')"
             />
           </a-form-item>
           <a-form-item
-            label="推荐理由"
+            :label="$t('bookList.Reason')"
             name="mark"
             :rules="[
               {
                 required: true,
-                message: '请输入推荐理由',
+                message: $t('bookList.Reason2'),
               },
             ]"
           >
             <a-textarea
               v-model:value="state.formState.mark"
-              :maxlength="5000"
+              :maxlength="300"
               show-count
               allow-clear
-              placeholder="推荐/采购理由"
+              :placeholder="$t('bookList.Reason2')"
             />
           </a-form-item>
           <a-form-item>
@@ -176,7 +181,7 @@
               html-type="submit"
               :loading="LOADING_STATE"
               style="width: 100%"
-              >提交书单</a-button
+              >{{ $t("bookList.Submit") }}</a-button
             >
           </a-form-item>
         </a-form>
@@ -186,7 +191,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive,onMounted } from "vue";
 import { RouterLink } from "vue-router";
 import utility from "../../utility/index";
 import reqInterface from "../../api/reqInterface";
@@ -195,12 +200,17 @@ import { storeToRefs } from "pinia";
 import { useBookListStore } from "../../store/bookListStore";
 import { useLoadingStateStore } from "../../store/loadingStateStore";
 import { useUserInfoStore } from "../../store/userInfoStore";
+import { useI18nStateStore } from "../../store/i18nStore";
+import { useI18n } from "vue-i18n";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
 const { DeleteBookListItem } = useBookListStore();
 const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
 const { SetloadingState } = useLoadingStateStore();
 const { USER_INFO } = useUserInfoStore();
-const routes = [
+const { I18n_STATE } = storeToRefs(useI18nStateStore());
+const I18nStateStore = useI18nStateStore();
+const { t } = useI18n();
+const routes = ref([
   {
     name: "home",
     breadcrumbName: "书展首页",
@@ -209,7 +219,7 @@ const routes = [
     name: "home-bookList",
     breadcrumbName: "我的书单",
   },
-];
+]);
 const columns = [
   {
     title: "封面",
@@ -280,6 +290,7 @@ const columns = [
     fixed: "right",
   },
 ];
+// ！类型修改
 const types = [
   { label: "教师", value: "教师" },
   { label: "学生", value: "学生" },
@@ -311,13 +322,43 @@ function onFinish(values) {
     values.isbns = Array.from(isbns).join(";");
     values.bookShowId = USER_INFO.bookShowId;
     reqInterface.submitSelectBooks(values).then((res) => {
-      message.success("书单已经成功提交至云端！");
+      message.success(t("bookList.Submit2"));
       visible.value = false;
     });
   } else {
-    message.error("书单为空，无法上传书单！");
+    message.error(t("bookList.Submit3"));
   }
 }
+// 监听语言切换更新导航
+I18nStateStore.$subscribe((mutation, state) => {
+  console.log(mutation, state);
+  switch (state.I18n_STATE) {
+    case "English":
+      routes.value[0].breadcrumbName = "书展首页";
+      routes.value[1].breadcrumbName = "我的书单";
+      break;
+    case "简体中文":
+      routes.value[0].breadcrumbName = "Home";
+      routes.value[1].breadcrumbName = "My book list";
+      break;
+    default:
+      break;
+  }
+});
+onMounted(()=>{
+  switch (I18n_STATE.value) {
+    case "English":
+      routes.value[0].breadcrumbName = "书展首页";
+      routes.value[1].breadcrumbName = `我的书单`;
+      break;
+    case "简体中文":
+      routes.value[0].breadcrumbName = "Home";
+      routes.value[1].breadcrumbName = `My book list`;
+      break;
+    default:
+      break;
+  }
+})
 </script>
 
 <style lang="scss" scoped>

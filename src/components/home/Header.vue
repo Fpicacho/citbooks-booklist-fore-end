@@ -53,15 +53,15 @@
     <!-- 退出登录模态框 -->
     <a-modal
       :visible="visible"
-      title="警告"
-      ok-text="确认"
-      cancel-text="取消"
+      :title="$t('PromptInfo.Warn')"
+      :ok-text="$t('BooklistInfo.okText')"
+      :cancel-text="$t('BooklistInfo.cancelText')"
       @cancel="hideModal('cancel')"
       @ok="hideModal('logOut')"
     >
       <p>
-        登出后将会<span style="color: red">完全删除</span
-        >我的书单内书籍信息，登出前请务必将书单导出备份。
+        {{$t('PromptInfo.emptyContent')}}<span style="color: red">{{$t('PromptInfo.logoutText2')}}</span
+        >{{$t('PromptInfo.logoutText3')}}
       </p>
     </a-modal>
   </div>
