@@ -63,6 +63,15 @@ const routes = [
     component: () => import("../views/Login/LoginView.vue"),
   },
   {
+    // test
+    path: "/test",
+    name: "test",
+    meta: {
+      noAuth: true,
+    },
+    component: () => import("../views/test"),
+  },
+  {
     // 404
     path: "/404",
     name: "404",

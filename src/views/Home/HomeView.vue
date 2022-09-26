@@ -143,7 +143,7 @@ import { useUserInfoStore } from "../../store/userInfoStore";
 const { SetBookListItem } = useBookListStore();
 const { USER_INFO } = useUserInfoStore();
 
-let categoryList = "";
+let categoryList = new Set();
 const fieldNames = {
   title: "name",
   key: "id",
@@ -173,6 +173,7 @@ const state = reactive({
     value: "",
   },
 });
+let temporaryList = new Set();
 
 // 页面初始化
 onMounted(() => {
@@ -251,6 +252,7 @@ function clickPagination(index, page) {
         }
       });
   }
+
   console.log(state.pager.current, state.pager.pageSize);
   document.scrollingElement.scrollTop = 0;
 }
@@ -263,11 +265,17 @@ function categoryTreeNode(params) {
 }
 
 // 点击二级树节点逻辑
-function clickTreeNode(node) {
-  // const reg = /-/g;
+function clickTreeNode(node, enent) {
   state.searchBoxData.value = "";
-  categoryList = node.join(";");
   state.pager.current = 1;
+  temporaryList.clear();
+  node.forEach((item) => {
+    temporaryList.add(item);
+  });
+  enent.halfCheckedKeys.forEach((item) => {
+    temporaryList.add(item);
+  });
+  categoryList = [...temporaryList].join(";");
   bookCategorySearch({
     bookShowId: USER_INFO.bookShowId,
     category: categoryList,

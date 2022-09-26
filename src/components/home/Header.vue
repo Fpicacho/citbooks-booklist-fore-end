@@ -30,7 +30,7 @@
           <template #overlay>
             <a-menu @click="handleMenuClick">
               <a-menu-item key="1"> 我的书单 </a-menu-item>
-              <a-menu-item key="3"> 选书记录 </a-menu-item>
+              <a-menu-item key="3" v-if="USER_INFO.citUser"> 选书记录 </a-menu-item>
               <a-menu-item key="2"> 登出 </a-menu-item>
             </a-menu>
           </template>
