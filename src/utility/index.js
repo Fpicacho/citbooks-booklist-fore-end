@@ -34,7 +34,7 @@ function outputExcel(value) {
   if (value.length > 0) {
     const ExcelItem = [];
     value.forEach((item) => {
-      let { imgUrl, ...params } = item;
+      let { imgUrl, description, eventInfo, awardInfo, ...params } = item;
       ExcelItem.push(params);
     });
     const workbook = XLSX.utils.book_new();
@@ -82,5 +82,5 @@ function outputExcel(value) {
 export default {
   goTo,
   bookItemPure,
-  outputExcel
+  outputExcel,
 };

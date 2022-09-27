@@ -60,7 +60,7 @@
       @ok="hideModal('logOut')"
     >
       <p>
-        {{$t('PromptInfo.emptyContent')}}<span style="color: red">{{$t('PromptInfo.logoutText2')}}</span
+        {{$t('PromptInfo.logoutText')}}<span style="color: red">{{$t('PromptInfo.logoutText2')}}</span
         >{{$t('PromptInfo.logoutText3')}}
       </p>
     </a-modal>

@@ -43,7 +43,8 @@ module.exports = {
     Warn: "Warn",
     logoutText: "After logging out will be",
     logoutText2: "remove completely",
-    logoutText3: "The book information in My Book List, please be sure to export and backup the book list before logging out.",
+    logoutText3:
+      "The book information in My Book List, please be sure to export and backup the book list before logging out.",
   },
   // 书单相关提示信息
   BooklistInfo: {
@@ -78,6 +79,7 @@ module.exports = {
   bookList: {
     Details: "Details",
     Delete: "delete",
+    Export: "Export",
     Excel: "Export book list to local (Excel table)",
     Upload: "Upload my book selection list",
     Upload2: "Upload book list",
@@ -103,4 +105,27 @@ module.exports = {
     Submit2: "The book list has been successfully submitted to the cloud!",
     Submit3: "The book list is empty, the book list cannot be uploaded!",
   },
+  // 表格
+  table: {
+    Cover: "Cover",
+    BookTitle: "BookTitle",
+    Author: "Author",
+    PublishingHouse: "PublishingHouse",
+    Category: "Category",
+    ISBN: "ISBN",
+    CLCnumber: "CLCnumber",
+    Framing: "Framing",
+    Pages: "Pages",
+    Currency: "Currency",
+    Price: "Price",
+    Availability: "Availability",
+    Operate: "Operate",
+    NumberOfResults: "Result:",
+    TheTotalNumberOfSelectedBooks: "Total:",
+  },
+    // 404页面
+    404: {
+      title: "Life is always a little ridiculous, you say.",
+      BackToHome: "Back to Home",
+    },
 };

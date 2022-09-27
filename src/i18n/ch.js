@@ -77,6 +77,7 @@ module.exports = {
   bookList: {
     Details: "详情",
     Delete: "删除",
+    Export: "导出",
     Excel: "导出书单至本地（Excel表格）",
     Upload: "上传我的选书清单",
     Upload2: "上传书单",
@@ -101,5 +102,28 @@ module.exports = {
     Submit: "提交书单",
     Submit2: "书单已经成功提交至云端！",
     Submit3: "书单为空，无法上传书单！",
+  },
+  // 表格
+  table: {
+    Cover: "封面",
+    BookTitle: "书名",
+    Author: "作者",
+    PublishingHouse: "出版社",
+    Category: "类别",
+    ISBN: "ISBN",
+    CLCnumber: "中图分类号",
+    Framing: "装帧",
+    Pages: "页数",
+    Currency: "币制",
+    Price: "价格",
+    Availability: "供货状态",
+    Operate: "操作",
+    NumberOfResults: "结果数：",
+    TheTotalNumberOfSelectedBooks: "选书总数量：",
+  },
+  // 404页面
+  404: {
+    title: "生活总归带点荒谬，你说是吧。",
+    BackToHome: "返回首页",
   },
 };

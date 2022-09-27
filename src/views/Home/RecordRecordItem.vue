@@ -3,7 +3,7 @@
     <div class="container">
       <!-- 提示信息 -->
       <a-alert
-        message="尊敬的用户您好，在使用移动设备时建议将屏幕横置，以获得更好的阅览体验！"
+        :message="$t('PromptInfo.message')"
         type="warning"
         closable
         style="margin-bottom: 20px"
@@ -40,13 +40,15 @@
               <a-button
                 type="link"
                 @click="utility.goTo('home-details', { isbn: record.isbn })"
-                >详情</a-button
+                >{{ $t("bookList.Details") }}</a-button
               >
             </template>
           </template>
           <template #footer>
-            <a-button type="primary" @click="utility.outputExcel(bookListData)"
-              >导出书单至本地（Excel表格）</a-button
+            <a-button
+              type="primary"
+              @click="utility.outputExcel(bookListData)"
+              >{{ $t("bookList.Excel") }}</a-button
             >
           </template>
         </a-table>
@@ -58,10 +60,14 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
 import reqInterface from "../../api/reqInterface";
 import utility from "../../utility/index";
+import { useI18nStateStore } from "../../store/i18nStore";
+const { I18n_STATE } = storeToRefs(useI18nStateStore());
+const I18nStateStore = useI18nStateStore();
 const $route = useRoute();
-const routes = [
+const routes = ref([
   {
     name: "home",
     breadcrumbName: "书展首页",
@@ -74,8 +80,8 @@ const routes = [
     name: "home-record-RecordItem",
     breadcrumbName: "详情",
   },
-];
-const columns = [
+]);
+const columns = ref([
   {
     title: "封面",
     dataIndex: "imgUrl",
@@ -144,12 +150,22 @@ const columns = [
     key: "operate",
     fixed: "right",
   },
-];
+]);
 
 const bookListData = ref([]);
 
 onMounted(() => {
   selectBookRecordItem();
+  switch (I18n_STATE.value) {
+    case "English":
+      ch();
+      break;
+    case "简体中文":
+      en();
+      break;
+    default:
+      break;
+  }
 });
 
 // 获取明细列表
@@ -163,6 +179,55 @@ function selectBookRecordItem() {
         bookListData.value.push(utility.bookItemPure(item));
       });
     });
+}
+// 监听语言切换更新导航
+I18nStateStore.$subscribe((mutation, state) => {
+  switch (state.I18n_STATE) {
+    case "English":
+      ch();
+      break;
+    case "简体中文":
+      en();
+      break;
+    default:
+      break;
+  }
+});
+function ch() {
+  routes.value[0].breadcrumbName = "书展首页";
+  routes.value[1].breadcrumbName = "选书记录";
+  routes.value[2].breadcrumbName = "详情";
+  columns.value[0].title = "封面";
+  columns.value[1].title = "书名";
+  columns.value[2].title = "作者";
+  columns.value[3].title = "出版社";
+  columns.value[4].title = "类别";
+  columns.value[5].title = "ISBN";
+  columns.value[6].title = "中图分类号";
+  columns.value[7].title = "装帧";
+  columns.value[8].title = "页数";
+  columns.value[9].title = "币制";
+  columns.value[10].title = "价格";
+  columns.value[11].title = "供货状态";
+  columns.value[12].title = "操作";
+}
+function en() {
+  routes.value[0].breadcrumbName = "Home";
+  routes.value[1].breadcrumbName = "Book selection record";
+  routes.value[2].breadcrumbName = "Details";
+  columns.value[0].title = "Cover";
+  columns.value[1].title = "BookTitle";
+  columns.value[2].title = "Author";
+  columns.value[3].title = "PublishingHouse";
+  columns.value[4].title = "Category";
+  columns.value[5].title = "ISBN";
+  columns.value[6].title = "CLCnumber";
+  columns.value[7].title = "Framing";
+  columns.value[8].title = "Pages";
+  columns.value[9].title = "Currency";
+  columns.value[10].title = "Price";
+  columns.value[11].title = "Availability";
+  columns.value[12].title = "Operate";
 }
 </script>
 

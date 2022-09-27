@@ -13,23 +13,23 @@
         <a-form-item
           label=""
           name="account"
-          :rules="[{ required: true, message: '请输入账户!' }]"
+          :rules="[{ required: true, message: '请输入账户! Please enter an account!' }]"
         >
-          <a-input placeholder="组织账户" v-model:value="formState.account" />
+          <a-input placeholder="组织账户 Account" v-model:value="formState.account" />
         </a-form-item>
         <a-form-item
           label=""
           name="password"
-          :rules="[{ required: true, message: '请输入密码!' }]"
+          :rules="[{ required: true, message: '请输入密码! Please enter your password!' }]"
         >
           <a-input-password
-            placeholder="请输入密码"
+            placeholder="请输入密码 Password"
             v-model:value="formState.password"
           />
         </a-form-item>
         <a-form-item>
           <a-button type="primary" html-type="submit" style="width: 100%"
-            >登录</a-button
+            >登录 LogIn</a-button
           >
         </a-form-item>
       </a-form>

@@ -191,7 +191,7 @@
 </template>
 
 <script setup>
-import { ref, reactive,onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { RouterLink } from "vue-router";
 import utility from "../../utility/index";
 import reqInterface from "../../api/reqInterface";
@@ -201,7 +201,6 @@ import { useBookListStore } from "../../store/bookListStore";
 import { useLoadingStateStore } from "../../store/loadingStateStore";
 import { useUserInfoStore } from "../../store/userInfoStore";
 import { useI18nStateStore } from "../../store/i18nStore";
-import { useI18n } from "vue-i18n";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
 const { DeleteBookListItem } = useBookListStore();
 const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
@@ -209,7 +208,6 @@ const { SetloadingState } = useLoadingStateStore();
 const { USER_INFO } = useUserInfoStore();
 const { I18n_STATE } = storeToRefs(useI18nStateStore());
 const I18nStateStore = useI18nStateStore();
-const { t } = useI18n();
 const routes = ref([
   {
     name: "home",
@@ -220,7 +218,7 @@ const routes = ref([
     breadcrumbName: "我的书单",
   },
 ]);
-const columns = [
+const columns = ref([
   {
     title: "封面",
     dataIndex: "imgUrl",
@@ -289,7 +287,7 @@ const columns = [
     key: "operate",
     fixed: "right",
   },
-];
+]);
 // ！类型修改
 const types = [
   { label: "教师", value: "教师" },
@@ -310,6 +308,18 @@ const state = reactive({
   },
 });
 let visible = ref(false);
+onMounted(() => {
+  switch (I18n_STATE.value) {
+    case "English":
+      ch();
+      break;
+    case "简体中文":
+      en();
+      break;
+    default:
+      break;
+  }
+});
 // 提交表单逻辑
 function onFinish(values) {
   if (BOOK_LIST.value.length > 0) {
@@ -331,34 +341,51 @@ function onFinish(values) {
 }
 // 监听语言切换更新导航
 I18nStateStore.$subscribe((mutation, state) => {
-  console.log(mutation, state);
   switch (state.I18n_STATE) {
     case "English":
-      routes.value[0].breadcrumbName = "书展首页";
-      routes.value[1].breadcrumbName = "我的书单";
+      ch();
       break;
     case "简体中文":
-      routes.value[0].breadcrumbName = "Home";
-      routes.value[1].breadcrumbName = "My book list";
+      en();
       break;
     default:
       break;
   }
 });
-onMounted(()=>{
-  switch (I18n_STATE.value) {
-    case "English":
-      routes.value[0].breadcrumbName = "书展首页";
-      routes.value[1].breadcrumbName = `我的书单`;
-      break;
-    case "简体中文":
-      routes.value[0].breadcrumbName = "Home";
-      routes.value[1].breadcrumbName = `My book list`;
-      break;
-    default:
-      break;
-  }
-})
+function ch() {
+  routes.value[0].breadcrumbName = "书展首页";
+  routes.value[1].breadcrumbName = "我的书单";
+  columns.value[0].title = "封面";
+  columns.value[1].title = "书名";
+  columns.value[2].title = "作者";
+  columns.value[3].title = "出版社";
+  columns.value[4].title = "类别";
+  columns.value[5].title = "ISBN";
+  columns.value[6].title = "中图分类号";
+  columns.value[7].title = "装帧";
+  columns.value[8].title = "页数";
+  columns.value[9].title = "币制";
+  columns.value[10].title = "价格";
+  columns.value[11].title = "供货状态";
+  columns.value[12].title = "操作";
+}
+function en() {
+  routes.value[0].breadcrumbName = "Home";
+  routes.value[1].breadcrumbName = "My book list";
+  columns.value[0].title = "Cover";
+  columns.value[1].title = "BookTitle";
+  columns.value[2].title = "Author";
+  columns.value[3].title = "PublishingHouse";
+  columns.value[4].title = "Category";
+  columns.value[5].title = "ISBN";
+  columns.value[6].title = "CLCnumber";
+  columns.value[7].title = "Framing";
+  columns.value[8].title = "Pages";
+  columns.value[9].title = "Currency";
+  columns.value[10].title = "Price";
+  columns.value[11].title = "Availability";
+  columns.value[12].title = "Operate";
+}
 </script>
 
 <style lang="scss" scoped>

@@ -3,7 +3,7 @@
   <div class="recordView">
     <div class="container">
       <a-alert
-        message="尊敬的用户您好，在使用移动设备时建议将屏幕横置，以获得更好的阅览体验！"
+        :message="$t('PromptInfo.message')"
         type="warning"
         closable
         style="margin-bottom: 20px"
@@ -30,20 +30,21 @@
           <template #bodyCell="{ column, record, index }">
             <!-- 操作面板#表单插槽 -->
             <template v-if="column.dataIndex === 'operate'">
-              <a-button type="link" @click="jumpDetails(record.id)"
-                >详情</a-button
-              >
-              <a-button type="link" @click="exportExcel(record.id)" danger
-                >导出</a-button
-              >
+              <a-button type="link" @click="jumpDetails(record.id)">{{
+                $t("bookList.Details")
+              }}</a-button>
+              <a-button type="link" @click="exportExcel(record.id)" danger>{{
+                $t("bookList.Export")
+              }}</a-button>
             </template>
           </template>
           <!-- 操作面板#表头插槽 -->
           <template #title>
-            结果数：<span style="color: #ff4d4f">{{
-              store.totalRecordCount
-            }}</span
-            >&nbsp;&nbsp;&nbsp;&nbsp;选书总数量：<span style="color: #ff4d4f">{{
+            {{ $t("table.NumberOfResults")
+            }}<span style="color: #ff4d4f">{{ store.totalRecordCount }}</span
+            >&nbsp;&nbsp;&nbsp;&nbsp;{{
+              $t("table.TheTotalNumberOfSelectedBooks")
+            }}<span style="color: #ff4d4f">{{
               store.totalSelectBookCount
             }}</span>
           </template>
@@ -54,15 +55,19 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 import reqInterface from "../../api/reqInterface";
 import utility from "../../utility/index";
 
 import { useUserInfoStore } from "../../store/userInfoStore";
+import { useI18nStateStore } from "../../store/i18nStore";
 const { USER_INFO } = useUserInfoStore();
+const { I18n_STATE } = storeToRefs(useI18nStateStore());
+const I18nStateStore = useI18nStateStore();
 const $router = useRouter();
-const routes = [
+const routes = ref([
   {
     name: "home",
     breadcrumbName: "书展首页",
@@ -71,8 +76,8 @@ const routes = [
     name: "home-record",
     breadcrumbName: "选书记录",
   },
-];
-const columns = [
+]);
+const columns = ref([
   {
     title: "数量",
     dataIndex: "bookCount",
@@ -127,7 +132,7 @@ const columns = [
     fixed: "right",
     width: 100,
   },
-];
+]);
 const store = reactive({
   totalRecordCount: 0,
   totalSelectBookCount: 0,
@@ -137,13 +142,23 @@ const store = reactive({
 // 页面渲染完成时
 onMounted(() => {
   selectBookRecord();
+  switch (I18n_STATE.value) {
+    case "English":
+      ch();
+      break;
+    case "简体中文":
+      en();
+      break;
+    default:
+      break;
+  }
 });
 
 // 跳转详情
 function jumpDetails(id) {
   $router.push(`/home/record/${id}`);
 }
-// 获取当前书展老师选书记录
+// 获取当前书展选书记录
 function selectBookRecord() {
   reqInterface
     .selectBookRecord({
@@ -169,6 +184,45 @@ function exportExcel(id) {
       });
       utility.outputExcel(bookListData);
     });
+}
+// 监听语言切换更新导航
+I18nStateStore.$subscribe((mutation, state) => {
+  switch (state.I18n_STATE) {
+    case "English":
+      ch();
+      break;
+    case "简体中文":
+      en();
+      break;
+    default:
+      break;
+  }
+});
+function ch() {
+  routes.value[0].breadcrumbName = "书展首页";
+  routes.value[1].breadcrumbName = "选书记录";
+  columns.value[0].title = "数量";
+  columns.value[1].title = "姓名";
+  columns.value[2].title = "部门";
+  columns.value[3].title = "电话";
+  columns.value[4].title = "邮箱";
+  columns.value[5].title = "类型";
+  columns.value[6].title = "上传时间";
+  columns.value[7].title = "推荐理由";
+  columns.value[8].title = "操作";
+}
+function en() {
+  routes.value[0].breadcrumbName = "Home";
+  routes.value[1].breadcrumbName = "Book selection record";
+  columns.value[0].title = "Quantity";
+  columns.value[1].title = "Name";
+  columns.value[2].title = "Department";
+  columns.value[3].title = "Telephone";
+  columns.value[4].title = "Mail";
+  columns.value[5].title = "Type of jobs";
+  columns.value[6].title = "Upload time";
+  columns.value[7].title = "Recommend";
+  columns.value[8].title = "Operate";
 }
 </script>
 
