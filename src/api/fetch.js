@@ -8,7 +8,7 @@ import GlobalConfig from "../config/index";
 import utility from "../utility/index";
 
 let development = process.env.NODE_ENV == "development" ? true : false;
-
+let reqLength = 0;
 const fetch = axios.create({
   baseURL: development ? "" : GlobalConfig.serverUrl,
   timeout: GlobalConfig.reqTimeout,
@@ -19,7 +19,7 @@ fetch.defaults.headers.post["Content-Type"] =
 fetch.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    SetloadingState(true);
+    requestHeapDetection(true); //t
     return config;
   },
   function (error) {
@@ -33,7 +33,7 @@ fetch.interceptors.response.use(
   // 2xx 范围内的状态码都会触发该函数。
   function (response) {
     if (response.data.success === "1") {
-      SetloadingState(false);
+      requestHeapDetection(false); //f
       return response;
     } else {
       switch (response.data.success) {
@@ -49,7 +49,7 @@ fetch.interceptors.response.use(
           break;
       }
     }
-    SetloadingState(false);
+    requestHeapDetection(false); //f
     return response;
   },
   function (error) {
@@ -59,10 +59,25 @@ fetch.interceptors.response.use(
     } else {
       message.error(`${error.response.status}:${error.response.statusText}`);
     }
-    SetloadingState(false);
+    requestHeapDetection(false); //f
     return Promise.reject(error);
   }
 );
+
+// 请求队列
+function requestHeapDetection(state) {
+  if (state) {
+    reqLength = reqLength + 1;
+    SetloadingState(true);
+    return;
+  } else {
+    reqLength = reqLength - 1;
+    SetloadingState(true);
+  }
+  if (reqLength === 0) {
+    SetloadingState(false);
+  }
+}
 
 export default {
   get(url, params = {}) {

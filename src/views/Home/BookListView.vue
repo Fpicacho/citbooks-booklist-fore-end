@@ -201,6 +201,7 @@ import { useBookListStore } from "../../store/bookListStore";
 import { useLoadingStateStore } from "../../store/loadingStateStore";
 import { useUserInfoStore } from "../../store/userInfoStore";
 import { useI18nStateStore } from "../../store/i18nStore";
+import i18n from "@/i18n";
 const { BOOK_LIST } = storeToRefs(useBookListStore());
 const { DeleteBookListItem } = useBookListStore();
 const { LOADING_STATE } = storeToRefs(useLoadingStateStore());
@@ -208,6 +209,8 @@ const { SetloadingState } = useLoadingStateStore();
 const { USER_INFO } = useUserInfoStore();
 const { I18n_STATE } = storeToRefs(useI18nStateStore());
 const I18nStateStore = useI18nStateStore();
+const { t } = i18n.global;
+
 const routes = ref([
   {
     name: "home",
