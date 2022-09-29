@@ -126,4 +126,12 @@ module.exports = {
     title: "生活总归带点荒谬，你说是吧。",
     BackToHome: "返回首页",
   },
+  // 页脚
+  footer:{
+    Copywriting:"自2022年免费线上书展",
+    officialWeb:"公司官网",
+    copyright:"版权所有 © 中国科技资料进出口总公司",
+    beian1:"京ICP备06062204号京",
+    baian2:"公网安备 11010802039466号"
+  }
 };

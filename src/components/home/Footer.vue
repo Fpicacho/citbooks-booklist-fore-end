@@ -2,14 +2,16 @@
   <!-- 页脚 src\components\home\Footer.vue-->
   <div class="footer">
     <div class="l">
-      <span class="item">自2022年免费线上书展</span>
-      <a href="" class="item">fpicacho@gmail.com</a>
-      <a href="" class="item">公司官网</a>
+      <span class="item">{{ $t("footer.Copywriting") }}</span>
+      <a href="mailto:admin@ctibook.com" class="item">admin@ctibook.com</a>
+      <a href="http://www.ctibooks.com.cn/#/" class="item">{{
+        $t("footer.officialWeb")
+      }}</a>
     </div>
     <div class="r">
-      <span class="item">版权所有 © 中国科技资料进出口总公司</span>
-      <span class="item">京ICP备11126448号</span>
-      <span class="item">京公网安备 130040051243号</span>
+      <span class="item">{{ $t("footer.copyright") }}</span>
+      <span class="item">{{ $t("footer.beian1") }}</span>
+      <span class="item">{{ $t("footer.baian2") }}</span>
     </div>
   </div>
 </template>

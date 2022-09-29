@@ -123,9 +123,17 @@ module.exports = {
     NumberOfResults: "Result:",
     TheTotalNumberOfSelectedBooks: "Total:",
   },
-    // 404页面
-    404: {
-      title: "Life is always a little ridiculous, you say.",
-      BackToHome: "Back to Home",
-    },
+  // 404页面
+  404: {
+    title: "Life is always a little ridiculous, you say.",
+    BackToHome: "Back to Home",
+  },
+  // 页脚
+  footer: {
+    Copywriting: "Free online book exhibition since 2022",
+    officialWeb: "Company official website",
+    copyright: "© ctibooks",
+    beian1: "Jing ICP Bei No. 06062204 Jing",
+    baian2: "Public Network Anbei No. 11010802039466",
+  },
 };
