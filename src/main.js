@@ -26,5 +26,4 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 });
-
 createApp(App).use(router).use(VueI18n).use(pinia).use(Antd).mount("#app");
