@@ -24,7 +24,7 @@ const routes = [
         name: "home-bookList",
         component: () => import("../views/Home/BookListView.vue"),
         meta: {
-          keepAlive: false,
+          keepAlive: true,
         },
       },
       {
