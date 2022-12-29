@@ -10,6 +10,7 @@ import "ant-design-vue/dist/antd.css";
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
+// 路由守卫
 router.beforeEach(async (to, from, next) => {
   const bookShowId = localStorage.userInfoStore;
   if (bookShowId) {
