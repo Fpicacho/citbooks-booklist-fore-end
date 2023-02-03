@@ -79,6 +79,13 @@ function outputExcel(value) {
   message.error("书单为空，无法导出Excel");
 }
 
+// 验证是否为邮箱
+function isEmail(value) {
+  const regStr = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+  return regStr.test(value);
+}
+
+
 export default {
   goTo,
   bookItemPure,
